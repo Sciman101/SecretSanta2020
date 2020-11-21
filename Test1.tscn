@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://DebugTiles.tres" type="TileSet" id=1]
 [ext_resource path="res://icon.png" type="Texture" id=2]
@@ -9,6 +9,17 @@
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 32, 32 )
+
+[sub_resource type="GDScript" id=3]
+script/source = "extends KinematicBody2D
+
+func _physics_process(delta:float) -> void:
+	rotation_degrees += delta * 30
+
+# Pull the block along a certain direction
+func pull(direction:Vector2) -> Vector2:
+	return direction
+"
 
 [sub_resource type="RectangleShape2D" id=2]
 extents = Vector2( 12, 13 )
@@ -33,6 +44,19 @@ friction = 1500.0
 shape = SubResource( 1 )
 
 [node name="Sprite" type="Sprite" parent="Block"]
+modulate = Color( 0, 0, 0, 1 )
+texture = ExtResource( 2 )
+
+[node name="Rotator" type="KinematicBody2D" parent="." groups=[
+"Grabbable",
+]]
+position = Vector2( 270.751, 108.593 )
+script = SubResource( 3 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Rotator"]
+shape = SubResource( 1 )
+
+[node name="Sprite" type="Sprite" parent="Rotator"]
 modulate = Color( 0, 0, 0, 1 )
 texture = ExtResource( 2 )
 
@@ -77,6 +101,7 @@ shape = SubResource( 2 )
 [node name="GrapplingHook" type="Node2D" parent="Player"]
 script = ExtResource( 5 )
 max_rope_length = 128.0
+max_stretch = 16.0
 
 [node name="WrapCheck" type="RayCast2D" parent="Player/GrapplingHook"]
 

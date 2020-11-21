@@ -5,6 +5,7 @@ onready var wrap_ray := $WrapCheck
 onready var player : KinematicBody2D = get_parent()
 
 export var max_rope_length : float # Longest the rope can be
+export var max_stretch : float # How much can the rope stretch
 export var shot_gravity : float
 
 var extended : bool = false # Is the rope extended?
@@ -40,6 +41,11 @@ func _physics_process(delta:float) -> void:
 		
 		var ropelen = difference.length()
 		if ropelen > rope_length:
+			
+			# Snap the rope if it's too long
+			if ropelen > rope_length + max_stretch:
+				detach_grapple()
+				return
 			
 			# Try and pull
 			if stuck_parent != null:
@@ -101,6 +107,17 @@ func get_world_point() -> Vector2:
 	return pos
 
 
+# Stop the grapple
+func detach_grapple() -> void:
+	extended = false
+	# Drop the rope
+	rope.clear_points()
+	wrap_points.clear()
+	# Clear parent and position and everything
+	stuck_parent = null
+	stuck_position = Vector2.ZERO
+
+
 # DEBUG
 func _input(event):
 	if event is InputEventMouseButton:
@@ -131,13 +148,6 @@ func _input(event):
 				rope.add_point(stuck_position)
 				
 			else:
-				extended = false
-				
-				# Drop the rope
-				rope.clear_points()
-				wrap_points.clear()
-				
-				stuck_parent = null
-				stuck_position = Vector2.ZERO
+				detach_grapple()
 				# We boost the player a little
 				player.motion *= 1.5
