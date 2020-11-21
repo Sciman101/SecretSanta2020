@@ -16,6 +16,8 @@ export var max_air_jumps : int
 export var jump_buffer_time : float # How early can we press jump
 export var edge_buffer_time : float # How late can we press jump
 
+onready var grapple := $GrapplingHook
+
 # Calculated parameters
 var _gravity : float
 var _jump_speed : float
@@ -34,7 +36,28 @@ var was_grounded : bool
 var air_jumps : int
 
 func _ready() -> void:
-	# Calculate jump vars using projectile motion
+	_calculate_movement_params()
+
+
+func _physics_process(delta:float) -> void:
+	_handle_movement(delta)
+
+
+# Given a normal, ensure any velocity with a dot product less than 0 is removed
+func clamp_velocity_normal(norm:Vector2) -> void:
+	# First: do we even need to reproject motion?
+	if norm.dot(motion) < 0:
+		# Ok we do
+		# Create a tangent plane
+		var tangent_plane = Plane(Vector3(norm.x,norm.y,0),0)
+		var motion_new = tangent_plane.project(Vector3(motion.x,motion.y,0))
+		# Slightly decrease velocity
+		motion.x = motion_new.x * 0.99
+		motion.y = motion_new.y * 0.99
+
+
+# Calculate jump vars using projectile motion and acceleration
+func _calculate_movement_params() -> void:
 	_gravity = 2*jump_height/(jump_apex_time*jump_apex_time)
 	_jump_speed = _gravity*jump_apex_time
 	
@@ -53,10 +76,8 @@ func _ready() -> void:
 	else:
 		_friction = ACC_INSTANT
 
-
-# Move
-func _physics_process(delta:float) -> void:
-	
+# Do all movement stuff
+func _handle_movement(delta:float) -> void:
 	grounded = is_on_floor()
 	
 	# Get horizontal input
@@ -73,7 +94,10 @@ func _physics_process(delta:float) -> void:
 		if hor == 0:
 			acc = 0
 		else:
-			acc = _air_acceleration
+			if not grapple.extended:
+				acc = _air_acceleration
+			else:
+				acc = 0
 	# Accelerate
 	motion.x = move_toward(motion.x,hor * move_speed,acc*delta)
 	
