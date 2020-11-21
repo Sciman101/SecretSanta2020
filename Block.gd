@@ -13,11 +13,14 @@ func _physics_process(delta:float) -> void:
 	
 	motion = move_and_slide(motion,Vector2.UP)
 
+func get_motion() -> Vector2:
+	return motion
+
 # Pull the block along a certain direction
-func pull(direction:Vector2) -> Vector2:
+func pull(direction:Vector2,delta:float) -> Vector2:
 	
 	var pos_old = position
 	motion = move_and_slide(direction,Vector2.UP)
-	var delta = position - pos_old
+	var move = position - pos_old
 	
-	return direction + delta
+	return direction + move

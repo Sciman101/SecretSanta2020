@@ -37,6 +37,8 @@ var grounded : bool
 var was_grounded : bool
 var air_jumps : int
 
+var standing_on
+
 func _ready() -> void:
 	_calculate_movement_params()
 
@@ -97,8 +99,14 @@ func _handle_movement(delta:float) -> void:
 			acc = 0
 		else:
 			acc = _air_acceleration
-	# Accelerate
-	motion.x = move_toward(motion.x,hor * move_speed,acc*delta)
+	
+	if grapple.extended:
+		if hor == sign(motion.x):
+			# If grappling, free acceleration
+			motion.x += _air_acceleration * hor * delta * 0.5
+	else:
+		# Accelerate
+		motion.x = move_toward(motion.x,hor * move_speed,acc*delta)
 	
 	# Gravity
 	motion.y += _gravity * delta * (1 if motion.y <= 0 else falling_grav_multiplier)
@@ -134,4 +142,11 @@ func _handle_movement(delta:float) -> void:
 	
 	# Actually move
 	motion = move_and_slide(motion,Vector2.UP)
+	
+	standing_on = null
+	for i in range(get_slide_count()):
+		var c = get_slide_collision(i)
+		if c.normal == Vector2.UP and not (standing_on != null and standing_on is KinematicBody2D):
+			standing_on = c.collider
+	
 	was_grounded = grounded
