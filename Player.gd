@@ -18,6 +18,8 @@ export var edge_buffer_time : float # How late can we press jump
 
 onready var grapple := $GrapplingHook
 
+onready var sprite := $Sprite
+
 # Calculated parameters
 var _gravity : float
 var _jump_speed : float
@@ -53,18 +55,6 @@ func _physics_process(delta:float) -> void:
 	_handle_movement(delta)
 
 
-# Given a normal, ensure any velocity with a dot product less than 0 is removed
-func clamp_velocity_normal(norm:Vector2) -> void:
-	# First: do we even need to reproject motion?
-	if norm.dot(motion) < 0:
-		# Ok we do
-		# Create a tangent plane
-		var tangent_plane = Plane(Vector3(norm.x,norm.y,0),0)
-		var motion_new = tangent_plane.project(Vector3(motion.x,motion.y,0))
-		motion.x = motion_new.x
-		motion.y = motion_new.y
-
-
 # Calculate jump vars using projectile motion and acceleration
 func _calculate_movement_params() -> void:
 	_gravity = 2*jump_height/(jump_apex_time*jump_apex_time)
@@ -93,6 +83,9 @@ func _handle_movement(delta:float) -> void:
 	var hor := 0.0
 	if Input.is_action_pressed("right"): hor += 1
 	if Input.is_action_pressed("left"): hor -= 1
+	
+	if hor != 0:
+		sprite.flip_h = hor < 0
 	
 	# Determine acceleration
 	var acc = _acceleration

@@ -48,7 +48,9 @@ func _physics_process(delta:float) -> void:
 			# Move the player along the rope to the target pos
 			player.move_and_collide(difference.normalized() * (ropelen - rope_length))
 			# Clamp the player's velocity. This means we can't stretch the rope, and it also creates the momentum effect
-			player.clamp_velocity_normal(difference.normalized())
+			player.motion = clamp_velocity_normal(player.motion,difference.normalized())
+		
+		# Clamp parent object to within rope radius
 		
 		# Wrapping code
 		if stuck_parent == null:
@@ -79,6 +81,17 @@ func _physics_process(delta:float) -> void:
 					if rope.get_point_count() > 1:
 						rope.remove_point(1)
 
+# Given a normal, ensure any velocity with a dot product less than 0 is removed
+func clamp_velocity_normal(velocity:Vector2,norm:Vector2) -> Vector2:
+	# First: do we even need to reproject motion?
+	if norm.dot(velocity) < 0:
+		# Ok we do
+		# Create a tangent plane
+		var tangent_plane = Plane(Vector3(norm.x,norm.y,0),0)
+		var motion_new = tangent_plane.project(Vector3(velocity.x,velocity.y,0))
+		velocity.x = motion_new.x
+		velocity.y = motion_new.y
+	return velocity
 
 # Get where the hook is stuck
 func get_world_point() -> Vector2:
@@ -107,8 +120,9 @@ func _input(event):
 				
 				# Did we hit something to parent to?
 				stuck_parent = null
-				if wrap_ray.get_collider().is_in_group('Grabbable'):
-					stuck_parent = wrap_ray.get_collider()
+				var coll = wrap_ray.get_collider()
+				if coll and coll.is_in_group('Grabbable'):
+					stuck_parent = coll
 					stuck_position = stuck_parent.transform.xform_inv(stuck_position)
 				
 				# Reset points and add base points
