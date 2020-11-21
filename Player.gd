@@ -39,6 +39,16 @@ func _ready() -> void:
 	_calculate_movement_params()
 
 
+# DEBUGGING
+func _input(event):
+	if event is InputEventMouseButton:
+		if event.pressed:
+			if event.button_index == BUTTON_WHEEL_UP:
+				Engine.time_scale = min(1,Engine.time_scale+0.1)
+			elif event.button_index == BUTTON_WHEEL_DOWN:
+				Engine.time_scale = max(0,Engine.time_scale-0.1)
+
+
 func _physics_process(delta:float) -> void:
 	_handle_movement(delta)
 
@@ -51,9 +61,8 @@ func clamp_velocity_normal(norm:Vector2) -> void:
 		# Create a tangent plane
 		var tangent_plane = Plane(Vector3(norm.x,norm.y,0),0)
 		var motion_new = tangent_plane.project(Vector3(motion.x,motion.y,0))
-		# Slightly decrease velocity
-		motion.x = motion_new.x * 0.99
-		motion.y = motion_new.y * 0.99
+		motion.x = motion_new.x
+		motion.y = motion_new.y
 
 
 # Calculate jump vars using projectile motion and acceleration
@@ -94,10 +103,7 @@ func _handle_movement(delta:float) -> void:
 		if hor == 0:
 			acc = 0
 		else:
-			if not grapple.extended:
-				acc = _air_acceleration
-			else:
-				acc = 0
+			acc = _air_acceleration
 	# Accelerate
 	motion.x = move_toward(motion.x,hor * move_speed,acc*delta)
 	
