@@ -1,17 +1,15 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=10 format=2]
 
-[ext_resource path="res://DebugTiles.tres" type="TileSet" id=1]
-[ext_resource path="res://icon.png" type="Texture" id=2]
-[ext_resource path="res://Player.gd" type="Script" id=3]
-[ext_resource path="res://Block.gd" type="Script" id=4]
-[ext_resource path="res://GrapplingHook.gd" type="Script" id=5]
-[ext_resource path="res://Player.png" type="Texture" id=6]
-[ext_resource path="res://circle.png" type="Texture" id=7]
+[ext_resource path="res://scenes/DebugTiles.tres" type="TileSet" id=1]
+[ext_resource path="res://textures/icon.png" type="Texture" id=2]
+[ext_resource path="res://scenes/partial/Player.tscn" type="PackedScene" id=3]
+[ext_resource path="res://scripts/Block.gd" type="Script" id=4]
+[ext_resource path="res://textures/circle.png" type="Texture" id=7]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 32, 32 )
 
-[sub_resource type="GDScript" id=5]
+[sub_resource type="GDScript" id=2]
 script/source = "extends KinematicBody2D
 
 export var gravity : float
@@ -39,7 +37,7 @@ func pull(direction:Vector2,delta) -> Vector2:
 	return direction
 "
 
-[sub_resource type="GDScript" id=2]
+[sub_resource type="GDScript" id=3]
 script/source = "extends KinematicBody2D
 
 func _physics_process(delta:float) -> void:
@@ -55,9 +53,6 @@ func pull(direction:Vector2,delta:float) -> Vector2:
 
 [sub_resource type="CircleShape2D" id=4]
 radius = 16.0
-
-[sub_resource type="RectangleShape2D" id=3]
-extents = Vector2( 12, 13 )
 
 [node name="Test1" type="Node2D"]
 
@@ -86,7 +81,7 @@ texture = ExtResource( 2 )
 "Grabbable",
 ]]
 position = Vector2( 321.446, 33.3555 )
-script = SubResource( 5 )
+script = SubResource( 2 )
 gravity = 1000.0
 cutoff = 50.0
 
@@ -101,7 +96,7 @@ texture = ExtResource( 2 )
 "Grabbable",
 ]]
 position = Vector2( 316.794, 101.07 )
-script = SubResource( 2 )
+script = SubResource( 3 )
 
 [node name="Sprite" type="Sprite" parent="Rotator"]
 scale = Vector2( 0.125, 0.125 )
@@ -110,38 +105,5 @@ texture = ExtResource( 7 )
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Rotator"]
 shape = SubResource( 4 )
 
-[node name="Player" type="KinematicBody2D" parent="."]
-position = Vector2( 68.839, 254.329 )
-collision_layer = 2
-script = ExtResource( 3 )
-move_speed = 150.0
-acceleration_time = 0.1
-air_acceleration_time = 0.2
-friction_time = 0.05
-jump_height = 48.0
-jump_apex_time = 0.35
-falling_grav_multiplier = 1.5
-min_jump_speed = 100.0
-max_air_jumps = 1
-jump_buffer_time = 0.1
-edge_buffer_time = 0.2
-
-[node name="Sprite" type="Sprite" parent="Player"]
-texture = ExtResource( 6 )
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
-position = Vector2( 0, 3 )
-shape = SubResource( 3 )
-
-[node name="GrapplingHook" type="Node2D" parent="Player"]
-script = ExtResource( 5 )
-max_rope_length = 128.0
-max_stretch = 32.0
-
-[node name="WrapCheck" type="RayCast2D" parent="Player/GrapplingHook"]
-
-[node name="Rope" type="Line2D" parent="Player/GrapplingHook"]
-points = PoolVector2Array( 0, 0, 0, 0 )
-width = 6.0
-default_color = Color( 0.301961, 0.52549, 0.164706, 1 )
-joint_mode = 2
+[node name="Player" parent="." instance=ExtResource( 3 )]
+position = Vector2( 81, 187.5 )

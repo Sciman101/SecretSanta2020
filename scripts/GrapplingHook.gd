@@ -10,6 +10,10 @@ export var shot_gravity : float
 
 var extended : bool = false # Is the rope extended?
 
+var shot_position : Vector2 # Position of the fired shot
+var shot_motion : Vector2
+var shot : bool = false
+
 var allowed_slack : float = max_rope_length
 var rope_points = [] # All rope points
 
@@ -105,6 +109,26 @@ func clamp_velocity_normal(velocity:Vector2,norm:Vector2) -> Vector2:
 	return velocity
 
 
+
+# Start the grapple
+func attach_grapple(point:RopePoint) -> void:
+	extended = true
+	
+	# Raycast to find where we should stick
+	wrap_ray.cast_to = get_global_mouse_position() - player.global_position
+	wrap_ray.force_raycast_update()
+	
+	# Stick and update length
+	rope_points.append(point)
+	# Get slack
+	allowed_slack = point.world_pos().distance_to(global_position)
+	
+	# Reset points and add base points
+	rope.clear_points()
+	rope.add_point(player.global_position)
+	rope.add_point(point.world_pos())
+
+
 # Stop the grapple
 func detach_grapple() -> void:
 	
@@ -121,22 +145,8 @@ func _input(event):
 			
 			if not extended:
 				
-				extended = true
-				
-				# Raycast to find where we should stick
-				wrap_ray.cast_to = get_global_mouse_position() - player.global_position
-				wrap_ray.force_raycast_update()
-				
-				# Stick and update length
 				var point = RopePoint.new(wrap_ray.get_collision_point(),wrap_ray.get_collider())
-				rope_points.append(point)
-				# Get slack
-				allowed_slack = point.world_pos().distance_to(global_position)
-				
-				# Reset points and add base points
-				rope.clear_points()
-				rope.add_point(player.global_position)
-				rope.add_point(point.world_pos())
+				attach_grapple(point)
 				
 			else:
 				detach_grapple()
