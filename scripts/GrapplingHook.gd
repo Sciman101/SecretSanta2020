@@ -95,11 +95,15 @@ func _physics_process(delta:float) -> void:
 			wrap_ray.cast_to = global_transform.xform_inv(rope_points[1].world_pos()) * 0.9
 			wrap_ray.force_raycast_update()
 			
-			# Check dot product
-			var v1 = (rope_points[0].world_pos()-player.global_position).normalized()
-			var v2 = (rope_points[1].world_pos()-player.global_position).normalized()
-			
-			if v1.dot(v2) >= 0.99 and not wrap_ray.is_colliding():
+			if not wrap_ray.is_colliding():
+				
+				#If this condition is met, we want to do another test
+				# Raycast to rope_points[0], starting from a point on the line
+				# From the player to rope_points[1], such that the line from
+				# that point to rope_points[0] is perpendicular to the line from
+				# the player to rope_points[1].
+				
+				
 				# Unwrap
 				var old_point = rope_points[0]
 				rope_points.remove(0)
@@ -113,11 +117,15 @@ func clamp_velocity_normal(velocity:Vector2,norm:Vector2) -> Vector2:
 	# First: do we even need to reproject motion?
 	if norm.dot(velocity) < 0:
 		# Ok we do
-		# Create a tangent plane
-		var tangent_plane = Plane(Vector3(norm.x,norm.y,0),0)
-		var motion_new = tangent_plane.project(Vector3(velocity.x,velocity.y,0) * 0.99) # We decrease the velocity sliiiightly so we dont swing forever
-		velocity.x = motion_new.x
-		velocity.y = motion_new.y
+		# Vector projection time!
+		# https://demoman.net/?a=circle-vs-line (11/13)
+		
+		# Get the tangent vector
+		var tang = norm.tangent().normalized()
+		# Calculate distance along it
+		var dist = velocity.dot(tang)
+		return dist * tang * 0.99 # We reduce the speed slightly so we dont swing forever
+		
 	return velocity
 
 
