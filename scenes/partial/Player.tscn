@@ -43,7 +43,7 @@ edge_buffer_time = 0.2
 [node name="GrapplingHook" type="Node2D" parent="."]
 script = ExtResource( 2 )
 max_rope_length = 128.0
-max_stretch = 32.0
+max_stretch = 16.0
 
 [node name="WrapCheck" type="RayCast2D" parent="GrapplingHook"]
 
