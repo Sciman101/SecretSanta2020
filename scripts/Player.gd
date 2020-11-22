@@ -1,6 +1,7 @@
 extends KinematicBody2D
 
 const ACC_INSTANT = 1000000 # If acceleration time is 0, default to this
+const HALF_PI := PI/2
 
 # Exposed movement parameters
 export var move_speed : float
@@ -89,6 +90,11 @@ func _handle_movement(delta:float) -> void:
 	if hor != 0:
 		sprite.flip_h = hor < 0
 	
+	var target_angle := 0.0
+	if grapple.extended and not grounded:
+		target_angle = grapple.get_angle() + HALF_PI
+	sprite.rotation = lerp_angle(sprite.rotation,target_angle,delta*10)
+	
 	# Determine acceleration
 	var acc = _acceleration
 	if grounded:
@@ -100,10 +106,9 @@ func _handle_movement(delta:float) -> void:
 		else:
 			acc = _air_acceleration
 	
-	if grapple.extended:
-		if hor == sign(motion.x):
-			# If grappling, free acceleration
-			motion.x += _air_acceleration * hor * delta * 0.5
+	if not grounded and grapple.is_hanging():
+		# If grappling, free acceleration
+		motion.x += _air_acceleration * hor * delta * 0.5
 	else:
 		# Accelerate
 		motion.x = move_toward(motion.x,hor * move_speed,acc*delta)

@@ -23,6 +23,7 @@ func _ready() -> void:
 	# Unparent rope so it works in world space, because the inverse transform stuff is a pain in the ass
 	remove_child(rope)
 	player.get_parent().call_deferred('add_child',rope)
+	player.get_parent().call_deferred('move_child',rope,player.get_index())
 
 
 # Draw rope
@@ -41,12 +42,17 @@ func _process(delta):
 func _physics_process(delta:float) -> void:
 	if extended:
 		
+		var loose = Input.is_mouse_button_pressed(BUTTON_RIGHT)
+		
 		# Clamp player position to within the rope radius
 		# Get the point we're dangling from
 		var dangle_point = rope_points[0]
 		var difference = dangle_point.world_pos() - player.global_position
 		
 		var slack = difference.length()
+		
+		if loose:
+			allowed_slack = slack
 		
 		if slack > allowed_slack:
 			
@@ -109,14 +115,9 @@ func clamp_velocity_normal(velocity:Vector2,norm:Vector2) -> Vector2:
 	return velocity
 
 
-
 # Start the grapple
 func attach_grapple(point:RopePoint) -> void:
 	extended = true
-	
-	# Raycast to find where we should stick
-	wrap_ray.cast_to = get_global_mouse_position() - player.global_position
-	wrap_ray.force_raycast_update()
 	
 	# Stick and update length
 	rope_points.append(point)
@@ -131,11 +132,24 @@ func attach_grapple(point:RopePoint) -> void:
 
 # Stop the grapple
 func detach_grapple() -> void:
-	
 	extended = false
 	# Drop the rope
 	rope_points.clear()
 	rope.clear_points()
+
+
+# Are we hanging?
+func is_hanging() -> bool:
+	if extended:
+		return (rope_points[0].world_pos() - player.global_position).dot(Vector2.UP) > 0
+	return false
+
+
+func get_angle() -> float:
+	if extended:
+		return (rope_points[0].world_pos() - player.global_position).angle()
+	else:
+		return 0.0
 
 
 # DEBUG
@@ -144,6 +158,9 @@ func _input(event):
 		if event.button_index == BUTTON_LEFT and event.pressed:
 			
 			if not extended:
+				
+				wrap_ray.cast_to = (get_global_mouse_position() - player.global_position).normalized() * 512
+				wrap_ray.force_raycast_update()
 				
 				var point = RopePoint.new(wrap_ray.get_collision_point(),wrap_ray.get_collider())
 				attach_grapple(point)
