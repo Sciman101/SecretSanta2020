@@ -29,13 +29,15 @@ func _ready() -> void:
 # Draw rope
 func _process(delta):
 	if extended:
-		if rope_points.size()+1 == rope.get_point_count():
+		var n = rope.get_point_count()
+		# We reverse points so the vine extends from the pot
+		if rope_points.size()+1 == n:
 			# Update visuals
-			rope.set_point_position(0,player.global_position)
-			var index = 1
+			rope.set_point_position(n-1,player.global_position)
+			var index = n-2
 			for point in rope_points:
 				rope.set_point_position(index,point.world_pos())
-				index += 1
+				index -= 1
 
 
 # Update the rope
@@ -126,8 +128,8 @@ func attach_grapple(point:RopePoint) -> void:
 	
 	# Reset points and add base points
 	rope.clear_points()
-	rope.add_point(player.global_position)
 	rope.add_point(point.world_pos())
+	rope.add_point(player.global_position)
 
 
 # Stop the grapple
