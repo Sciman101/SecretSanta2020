@@ -1,7 +1,7 @@
 extends Node2D
 
 onready var rope := $Rope
-onready var wrap_ray := $WrapCheck
+onready var wrap_ray := $Ray
 onready var player : KinematicBody2D = get_parent()
 
 export var max_rope_length : float # Longest the rope can be
@@ -92,25 +92,34 @@ func _physics_process(delta:float) -> void:
 		
 		# Check for unwrapping
 		elif rope_points.size() > 1:
+		
 			wrap_ray.cast_to = global_transform.xform_inv(rope_points[1].world_pos()) * 0.9
 			wrap_ray.force_raycast_update()
 			
 			if not wrap_ray.is_colliding():
 				
-				#If this condition is met, we want to do another test
-				# Raycast to rope_points[0], starting from a point on the line
-				# From the player to rope_points[1], such that the line from
-				# that point to rope_points[0] is perpendicular to the line from
-				# the player to rope_points[1].
+				# Check against projected ray
+				var origin = rope_points[0].world_pos()
 				
+				var n = (player.global_position - rope_points[1].world_pos()).normalized()
+				var end = rope_points[1].world_pos() + (n.dot(rope_points[0].world_pos() - rope_points[1].world_pos()) * n)
 				
-				# Unwrap
-				var old_point = rope_points[0]
-				rope_points.remove(0)
-				rope_points[0].length_to_next += old_point.length_to_next
+				# We nudge the position out a tad bit so we don't intersect stuff
+				wrap_ray.global_position = origin + (end - origin) * 0.5
+				wrap_ray.cast_to = (end - origin) * 0.9
+				wrap_ray.force_raycast_update()
+				wrap_ray.position = Vector2.ZERO
 				
-				# Update visual
-				rope.remove_point(1)
+				DebugDraw.line(origin,end,Color.red)
+				
+				if not wrap_ray.is_colliding():
+					# Unwrap
+					var old_point = rope_points[0]
+					rope_points.remove(0)
+					rope_points[0].length_to_next += old_point.length_to_next
+					
+					# Update visual
+					rope.remove_point(1)
 
 # Given a normal, ensure any velocity with a dot product less than 0 is removed
 func clamp_velocity_normal(velocity:Vector2,norm:Vector2) -> Vector2:
@@ -124,7 +133,7 @@ func clamp_velocity_normal(velocity:Vector2,norm:Vector2) -> Vector2:
 		var tang = norm.tangent().normalized()
 		# Calculate distance along it
 		var dist = velocity.dot(tang)
-		return dist * tang * 0.99 # We reduce the speed slightly so we dont swing forever
+		return dist * tang # We reduce the speed slightly so we dont swing forever
 		
 	return velocity
 
@@ -175,7 +184,6 @@ func _input(event):
 				wrap_ray.force_raycast_update()
 				
 				var point = RopePoint.new(wrap_ray.get_collision_point(),wrap_ray.get_collider(),wrap_ray.get_collision_point().distance_to(player.global_position))
-				print(point.length_to_next)
 				attach_grapple(point)
 				
 			else:

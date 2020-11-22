@@ -19,6 +19,10 @@ config/name="SecretSanta"
 run/main_scene="res://scenes/Test1.tscn"
 config/icon="res://textures/icon.png"
 
+[autoload]
+
+DebugDraw="*res://DebugDraw.gd"
+
 [display]
 
 window/size/width=640

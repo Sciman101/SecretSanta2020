@@ -45,7 +45,7 @@ script = ExtResource( 2 )
 max_rope_length = 128.0
 max_stretch = 16.0
 
-[node name="WrapCheck" type="RayCast2D" parent="GrapplingHook"]
+[node name="Ray" type="RayCast2D" parent="GrapplingHook"]
 
 [node name="Rope" type="Line2D" parent="GrapplingHook"]
 points = PoolVector2Array( 0, 0, 0, 0 )
