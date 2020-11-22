@@ -20,6 +20,7 @@ export var edge_buffer_time : float # How late can we press jump
 onready var grapple := $GrapplingHook
 
 onready var sprite := $Sprite
+onready var animation := $AnimationPlayer
 
 # Calculated parameters
 var _gravity : float
@@ -90,9 +91,17 @@ func _handle_movement(delta:float) -> void:
 	if hor != 0:
 		sprite.flip_h = hor < 0
 	
+	if hor != 0 and grounded:
+		animation.play("Walk")
+	else:
+		animation.stop()
+		sprite.frame = 0
+	
 	var target_angle := 0.0
-	if grapple.extended and not grounded:
-		target_angle = grapple.get_angle() + HALF_PI
+	
+	if not grounded:
+		if grapple.extended:
+			target_angle = grapple.get_angle() + HALF_PI
 	sprite.rotation = lerp_angle(sprite.rotation,target_angle,delta*10)
 	
 	# Determine acceleration
