@@ -22,6 +22,7 @@ config/icon="res://textures/icon.png"
 [autoload]
 
 DebugDraw="*res://DebugDraw.gd"
+Game="*res://scripts/Game.gd"
 
 [display]
 

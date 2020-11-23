@@ -3,6 +3,7 @@ extends Node2D
 onready var rope := $Rope
 onready var wrap_ray := $Ray
 onready var player : KinematicBody2D = get_parent()
+var particles
 
 export var max_rope_length : float # Longest the rope can be
 export var max_stretch : float # How much can the rope stretch
@@ -23,6 +24,11 @@ func _ready() -> void:
 	remove_child(rope)
 	player.get_parent().call_deferred('add_child',rope)
 	player.get_parent().call_deferred('move_child',rope,player.get_index())
+	
+	# Setup particles
+	particles = Node2D.new()
+	particles.set_script(load("res://scripts/LeafParticles.gd"))
+	player.get_parent().call_deferred('add_child',particles)
 
 
 # Draw rope
@@ -44,6 +50,8 @@ func _physics_process(delta:float) -> void:
 	if extended:
 		
 		var loose = Input.is_mouse_button_pressed(BUTTON_RIGHT)
+		
+		player.modulate = Color.white
 		
 		# Clamp player position to within the rope radius
 		# Get the point we're dangling from
@@ -69,9 +77,13 @@ func _physics_process(delta:float) -> void:
 				difference = -dangle_point.relative.pull(-difference,delta)
 			
 			# Move the player along the rope to the target pos
-			player.move_and_collide(difference.normalized() * (slack - dangle_point.length_to_next))
+			var nudge = difference
+			if player.grounded: nudge.y = 0
+			player.move_and_collide(nudge.normalized() * (slack - dangle_point.length_to_next))
 			# Clamp the player's velocity. This means we can't stretch the rope, and it also creates the momentum effect
 			player.motion = clamp_velocity_normal(player.motion,difference.normalized())
+			
+			player.modulate = Color.red
 		
 		
 		# Check for wrapping
@@ -154,6 +166,17 @@ func attach_grapple(point:RopePoint) -> void:
 # Stop the grapple
 func detach_grapple() -> void:
 	extended = false
+	
+	# Create particles
+	for i in range(-1,rope_points.size()-1):
+		
+		var pos1 = player.global_position if i == -1 else rope_points[i].world_pos()
+		var pos2 = rope_points[i+1].world_pos()
+		var dist = floor(pos1.distance_to(pos2))* .2
+		# Loop over the length of the segment
+		for j in range(dist):
+			particles.add_particle(lerp(pos1,pos2,float(j)/dist)+Vector2(rand_range(-4,4),rand_range(-4,4)),player.motion * 0.2 * (float(abs(i))/rope_points.size()) * (1-(float(j)/dist)))
+	
 	# Drop the rope
 	rope_points.clear()
 	rope.clear_points()
@@ -189,7 +212,7 @@ func _input(event):
 			else:
 				detach_grapple()
 				# We boost the player a little
-				player.motion *= 1.5
+				#player.motion *= 1.5
 
 
 # A point on the rope

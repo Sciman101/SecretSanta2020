@@ -88,18 +88,23 @@ func _handle_movement(delta:float) -> void:
 	if Input.is_action_pressed("right"): hor += 1
 	if Input.is_action_pressed("left"): hor -= 1
 	
+	# Flip horizontally
 	if hor != 0:
-		sprite.flip_h = hor < 0
+		if not grapple.extended or grounded:
+			sprite.flip_h = hor < 0
 	
 	if hor != 0 and grounded:
 		animation.play("Walk")
 	else:
-		animation.stop()
-		sprite.frame = 0
+		if grapple.extended and not grounded:
+			animation.play("Spin")
+		else:
+			animation.stop()
+			sprite.frame = 0
 	
 	var target_angle := 0.0
 	
-	if not grounded:
+	if not grounded and not was_grounded:
 		if grapple.extended:
 			target_angle = grapple.get_angle() + HALF_PI
 	sprite.rotation = lerp_angle(sprite.rotation,target_angle,delta*10)

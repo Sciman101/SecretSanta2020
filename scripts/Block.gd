@@ -6,12 +6,13 @@ export var friction : float
 var motion : Vector2
 
 func _physics_process(delta:float) -> void:
-	motion.y += gravity * delta
-	
-	if is_on_floor():
-		motion.x = move_toward(motion.x,0,friction*delta)
-	
-	motion = move_and_slide(motion,Vector2.UP)
+	if Input.is_key_pressed(KEY_1):
+		motion.y += gravity * delta
+		
+		if is_on_floor():
+			motion.x = move_toward(motion.x,0,friction*delta)
+		
+		motion = move_and_slide(motion,Vector2.UP)
 
 func get_motion() -> Vector2:
 	return motion
