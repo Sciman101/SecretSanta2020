@@ -13,11 +13,13 @@ export var jump_apex_time : float # How many seconds should it take to reach the
 export var falling_grav_multiplier : float # When falling, we fall this much faster
 export var min_jump_speed : float # Minimum jump speed for variable jumping
 export var max_air_jumps : int
+export var throw_speed : float
 
 export var jump_buffer_time : float # How early can we press jump
 export var edge_buffer_time : float # How late can we press jump
 
-onready var grapple := $GrapplingHook
+onready var rope := $Rope
+onready var grapple := $Grapple
 
 onready var sprite := $Sprite
 onready var animation := $AnimationPlayer
@@ -44,6 +46,9 @@ var standing_on
 
 func _ready() -> void:
 	_calculate_movement_params()
+	
+	# Attach signals
+	grapple.connect("grapple_hit",rope,'attach_grapple')
 
 
 # DEBUGGING
@@ -84,6 +89,15 @@ func _calculate_movement_params() -> void:
 func _handle_movement(delta:float) -> void:
 	grounded = is_on_floor()
 	
+	# Throw
+	if Input.is_action_just_pressed("grapple"):
+		if rope.extended:
+			# Detach rope
+			rope.detach_grapple()
+		elif not grapple.thrown:
+			var dir = (get_global_mouse_position() - global_position).normalized()
+			grapple.throw(dir*throw_speed)
+	
 	# Get horizontal input
 	var hor := 0.0
 	if Input.is_action_pressed("right"): hor += 1
@@ -91,7 +105,7 @@ func _handle_movement(delta:float) -> void:
 	
 	# Flip horizontally
 	if hor != 0:
-		if not grapple.extended or grounded:
+		if not rope.extended or grounded:
 			sprite.flip_h = hor < 0
 	
 	if hor != 0 and grounded:
@@ -101,7 +115,7 @@ func _handle_movement(delta:float) -> void:
 		dust.direction.x = -hor * 8
 	else:
 		dust.emitting = false
-		if grapple.extended and not grounded:
+		if rope.extended and not grounded:
 			animation.playback_speed = abs(motion.x) / move_speed
 			animation.play("Spin")
 		else:
@@ -111,8 +125,8 @@ func _handle_movement(delta:float) -> void:
 	var target_angle := 0.0
 	
 	if not grounded and not was_grounded:
-		if grapple.extended:
-			target_angle = grapple.get_angle() + HALF_PI
+		if rope.extended:
+			target_angle = rope.get_angle() + HALF_PI
 	sprite.rotation = lerp_angle(sprite.rotation,target_angle,delta*10)
 	
 	# Determine acceleration
@@ -126,7 +140,7 @@ func _handle_movement(delta:float) -> void:
 		else:
 			acc = _air_acceleration
 	
-	if not grounded and grapple.is_hanging():
+	if not grounded and rope.is_hanging():
 		# If grappling, free acceleration
 		motion.x += _air_acceleration * hor * delta * 0.5
 	else:

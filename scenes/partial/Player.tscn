@@ -1,19 +1,22 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://textures/Player.png" type="Texture" id=1]
-[ext_resource path="res://scripts/GrapplingHook.gd" type="Script" id=2]
+[ext_resource path="res://scripts/Rope.gd" type="Script" id=2]
 [ext_resource path="res://scripts/Player.gd" type="Script" id=3]
 [ext_resource path="res://textures/Vine.png" type="Texture" id=4]
 [ext_resource path="res://textures/Dust.png" type="Texture" id=5]
+[ext_resource path="res://scripts/Grapple.gd" type="Script" id=7]
 
-[sub_resource type="Curve" id=4]
+[sub_resource type="Curve" id=5]
+_data = [ Vector2( 0, 0 ), 0.0, 0.0, 0, 0, Vector2( 0.956044, 1 ), 0.0815622, -0.0324422, 0, 0, Vector2( 1, 0 ), 0.0, 0.0, 0, 0 ]
+
+[sub_resource type="Curve" id=1]
 _data = [ Vector2( 0, 1 ), 0.0, 0.0, 0, 0, Vector2( 1, 0 ), -1.76308, 0.0, 0, 0 ]
 
-[sub_resource type="RectangleShape2D" id=1]
+[sub_resource type="RectangleShape2D" id=2]
 extents = Vector2( 12, 13 )
 
-[sub_resource type="Animation" id=2]
-resource_name = "Spin"
+[sub_resource type="Animation" id=3]
 length = 0.6
 loop = true
 tracks/0/type = "value"
@@ -29,7 +32,7 @@ tracks/0/keys = {
 "values": [ 8, 9, 10, 11, 12, 13 ]
 }
 
-[sub_resource type="Animation" id=3]
+[sub_resource type="Animation" id=4]
 length = 0.8
 loop = true
 tracks/0/type = "value"
@@ -57,23 +60,36 @@ jump_apex_time = 0.35
 falling_grav_multiplier = 1.5
 min_jump_speed = 100.0
 max_air_jumps = 1
+throw_speed = 1500.0
 jump_buffer_time = 0.1
 edge_buffer_time = 0.2
 
-[node name="GrapplingHook" type="Node2D" parent="."]
+[node name="Rope" type="Node2D" parent="."]
 script = ExtResource( 2 )
 max_rope_length = 128.0
 max_stretch = 16.0
 
-[node name="Ray" type="RayCast2D" parent="GrapplingHook"]
+[node name="Ray" type="RayCast2D" parent="Rope"]
 
-[node name="Rope" type="Line2D" parent="GrapplingHook"]
+[node name="RopeViz" type="Line2D" parent="Rope"]
 points = PoolVector2Array( 0, 0, 0, 0 )
 width = 8.0
 default_color = Color( 1, 1, 1, 1 )
 texture = ExtResource( 4 )
 texture_mode = 1
 joint_mode = 2
+
+[node name="Grapple" type="Line2D" parent="."]
+width = 8.0
+default_color = Color( 1, 1, 1, 1 )
+texture = ExtResource( 4 )
+texture_mode = 1
+joint_mode = 2
+script = ExtResource( 7 )
+wobble_curve = SubResource( 5 )
+wobble_intensity = 16.0
+
+[node name="GrapppleCheck" type="RayCast2D" parent="Grapple"]
 
 [node name="DustParticles" type="CPUParticles2D" parent="."]
 position = Vector2( 0, 12 )
@@ -88,7 +104,7 @@ gravity = Vector2( 0, 0 )
 initial_velocity = 10.0
 scale_amount = 0.5
 scale_amount_random = 0.5
-scale_amount_curve = SubResource( 4 )
+scale_amount_curve = SubResource( 1 )
 
 [node name="Sprite" type="Sprite" parent="."]
 texture = ExtResource( 1 )
@@ -97,8 +113,8 @@ hframes = 8
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2( 0, 3 )
-shape = SubResource( 1 )
+shape = SubResource( 2 )
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-anims/Spin = SubResource( 2 )
-anims/Walk = SubResource( 3 )
+anims/Spin = SubResource( 3 )
+anims/Walk = SubResource( 4 )

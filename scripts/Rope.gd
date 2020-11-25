@@ -1,6 +1,6 @@
 extends Node2D
 
-onready var rope := $Rope
+onready var rope := $RopeViz
 onready var wrap_ray := $Ray
 onready var player : KinematicBody2D = get_parent()
 var particles
@@ -27,6 +27,7 @@ func _ready() -> void:
 	
 	# Setup particles
 	particles = Node2D.new()
+	particles.name = "LeafParticles"
 	particles.set_script(load("res://scripts/LeafParticles.gd"))
 	player.get_parent().call_deferred('add_child',particles)
 
@@ -161,15 +162,21 @@ func clamp_velocity_normal(velocity:Vector2,norm:Vector2) -> Vector2:
 
 
 # Start the grapple
-func attach_grapple(point:RopePoint) -> void:
+func attach_grapple(point:Vector2,relative) -> void:
 	extended = true
 	
+	if not relative.is_in_group("Grabbable"):
+		relative = null
+	
+	# Create rope point
+	var rp = RopePoint.new(point,relative,point.distance_to(player.global_position))
+	
 	# Stick and update length
-	rope_points.append(point)
+	rope_points.append(rp)
 	
 	# Reset points and add base points
 	rope.clear_points()
-	rope.add_point(point.world_pos())
+	rope.add_point(point)
 	rope.add_point(player.global_position)
 
 
@@ -204,25 +211,6 @@ func get_angle() -> float:
 		return (rope_points[0].world_pos() - player.global_position).angle()
 	else:
 		return 0.0
-
-
-# DEBUG
-func _input(event):
-	if event is InputEventMouseButton:
-		if event.button_index == BUTTON_LEFT and event.pressed:
-			
-			if not extended:
-				
-				wrap_ray.cast_to = (get_global_mouse_position() - player.global_position).normalized() * 512
-				wrap_ray.force_raycast_update()
-				
-				var point = RopePoint.new(wrap_ray.get_collision_point(),wrap_ray.get_collider(),wrap_ray.get_collision_point().distance_to(player.global_position))
-				attach_grapple(point)
-				
-			else:
-				detach_grapple()
-				# We boost the player a little
-				#player.motion *= 1.5
 
 
 # A point on the rope
