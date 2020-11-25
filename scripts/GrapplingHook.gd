@@ -68,7 +68,7 @@ func _physics_process(delta:float) -> void:
 		if slack > dangle_point.length_to_next:
 			
 			# Snap the rope if it's too long
-			if slack > dangle_point.length_to_next * 1.1:
+			if slack > dangle_point.length_to_next + 16:
 				detach_grapple()
 				return
 			
@@ -103,34 +103,45 @@ func _physics_process(delta:float) -> void:
 		
 		# Check for unwrapping
 		elif rope_points.size() > 1:
-		
-			wrap_ray.cast_to = global_transform.xform_inv(rope_points[1].world_pos()) * 0.9
-			wrap_ray.force_raycast_update()
 			
-			if not wrap_ray.is_colliding():
-				
-				# Check against projected ray
-				var origin = rope_points[0].world_pos()
-				
-				var n = (player.global_position - rope_points[1].world_pos()).normalized()
-				var end = rope_points[1].world_pos() + (n.dot(rope_points[0].world_pos() - rope_points[1].world_pos()) * n)
-				
-				# We nudge the position out a tad bit so we don't intersect stuff
-				wrap_ray.global_position = origin + (end - origin) * 0.5
-				wrap_ray.cast_to = (end - origin) * 0.9
+			# Are the two ropes even remotely aligned?
+			var v1 = (rope_points[0].world_pos() - rope_points[1].world_pos()).normalized()
+			var v2 = (player.global_position - rope_points[1].world_pos()).normalized()
+			
+			DebugDraw.line(rope_points[1].world_pos(),rope_points[1].world_pos()+v1*16,Color.red)
+			DebugDraw.line(rope_points[1].world_pos(),rope_points[1].world_pos()+v2*16,Color.red)
+			
+			if v1.dot(v1) >= 0.5:
+			
+				wrap_ray.cast_to = global_transform.xform_inv(rope_points[1].world_pos()) * 0.9
 				wrap_ray.force_raycast_update()
-				wrap_ray.position = Vector2.ZERO
-				
-				DebugDraw.line(origin,end,Color.red)
 				
 				if not wrap_ray.is_colliding():
-					# Unwrap
-					var old_point = rope_points[0]
-					rope_points.remove(0)
-					rope_points[0].length_to_next += old_point.length_to_next
 					
-					# Update visual
-					rope.remove_point(1)
+					# Check against projected ray
+					var origin = rope_points[0].world_pos()
+					
+					var n = (player.global_position - rope_points[1].world_pos()).normalized()
+					var end = rope_points[1].world_pos() + (n.dot(rope_points[0].world_pos() - rope_points[1].world_pos()) * n)
+					
+					# We nudge the position out a tad bit so we don't intersect stuff
+					wrap_ray.global_position = origin + (end - origin) * 0.5
+					wrap_ray.cast_to = (end - origin) * 0.9
+					wrap_ray.force_raycast_update()
+					wrap_ray.position = Vector2.ZERO
+					
+					DebugDraw.line(rope_points[1].world_pos(),player.global_position,Color.red)
+					DebugDraw.line(origin,end,Color.red)
+					
+					if not wrap_ray.is_colliding():
+						
+						# Unwrap
+						var old_point = rope_points[0]
+						rope_points.remove(0)
+						rope_points[0].length_to_next += old_point.length_to_next
+						
+						# Update visual
+						rope.remove_point(1)
 
 # Given a normal, ensure any velocity with a dot product less than 0 is removed
 func clamp_velocity_normal(velocity:Vector2,norm:Vector2) -> Vector2:

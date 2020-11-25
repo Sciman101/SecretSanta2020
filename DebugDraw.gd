@@ -21,8 +21,7 @@ func circle(center:Vector2,radius:float,c:Color) -> void:
 
 # Tell the engine to redraw us
 func _process(delta):
-	if not stack.empty():
-		update()
+	update()
 
 # Draw all the queued stuff
 func _draw():
