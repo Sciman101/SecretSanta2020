@@ -27,9 +27,6 @@ func _ready() -> void:
 # Move the hook and actually embed it in stuff
 func _physics_process(delta:float) -> void:
 	if thrown:
-		hook.position += motion * delta
-		hook.cast_to = motion * delta
-		
 		shot_time += delta
 		recalculate_visuals()
 		
@@ -38,6 +35,9 @@ func _physics_process(delta:float) -> void:
 			# We must have hit something
 			emit_signal("grapple_hit",hook.get_collision_point(),hook.get_collider())
 			end_throw()
+		
+		hook.position += motion * delta
+		hook.cast_to = motion * delta
 
 
 # Recalculate the viuals for the hook
@@ -65,7 +65,7 @@ func throw(mot:Vector2) -> void:
 	shot_time = 0
 	
 	hook.position = Vector2.ZERO
-	hook.cast_to = motion.normalized() * 16
+	hook.cast_to = motion.normalized() * 32
 	visible = true
 
 func end_throw() -> void:
