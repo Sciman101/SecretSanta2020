@@ -78,12 +78,11 @@ func _physics_process(delta:float) -> void:
 			
 			# Move the player along the rope to the target pos
 			var nudge = difference
-			if player.grounded: nudge.y = 0
 			player.move_and_collide(nudge.normalized() * (slack - dangle_point.length_to_next))
 			# Clamp the player's velocity. This means we can't stretch the rope, and it also creates the momentum effect
 			player.motion = clamp_velocity_normal(player.motion,difference.normalized())
 			
-			player.modulate = Color.red
+			#player.modulate = Color.red
 		
 		
 		# Check for wrapping
@@ -145,7 +144,7 @@ func clamp_velocity_normal(velocity:Vector2,norm:Vector2) -> Vector2:
 		var tang = norm.tangent().normalized()
 		# Calculate distance along it
 		var dist = velocity.dot(tang)
-		return dist * tang # We reduce the speed slightly so we dont swing forever
+		return dist * tang * .99 # We reduce the speed slightly so we dont swing forever
 		
 	return velocity
 

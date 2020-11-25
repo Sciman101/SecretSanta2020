@@ -21,6 +21,7 @@ onready var grapple := $GrapplingHook
 
 onready var sprite := $Sprite
 onready var animation := $AnimationPlayer
+onready var dust := $DustParticles
 
 # Calculated parameters
 var _gravity : float
@@ -94,9 +95,14 @@ func _handle_movement(delta:float) -> void:
 			sprite.flip_h = hor < 0
 	
 	if hor != 0 and grounded:
+		animation.playback_speed = 1
 		animation.play("Walk")
+		dust.emitting = true
+		dust.direction.x = -hor * 8
 	else:
+		dust.emitting = false
 		if grapple.extended and not grounded:
+			animation.playback_speed = abs(motion.x) / move_speed
 			animation.play("Spin")
 		else:
 			animation.stop()

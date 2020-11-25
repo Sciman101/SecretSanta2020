@@ -4,7 +4,7 @@ const LeafTex = preload("res://textures/Leaves.png")
 const SIZE = Vector2.ONE * 8
 
 const MIN_LIFETIME = 0.5
-const MAX_LIFETIME = 2
+const MAX_LIFETIME = 1
 
 const GRAVITY := 25
 
@@ -41,4 +41,7 @@ func _process(delta:float) -> void:
 func _draw():
 	if not particles.empty():
 		for part in particles:
-			draw_texture_rect_region(LeafTex,Rect2(part.p,SIZE),Rect2(Vector2.RIGHT*part.f*SIZE.x,SIZE),part.c)
+			var c = part.c
+			# Fade alpha over lifetime
+			c.a = min(part.l*2,1)
+			draw_texture_rect_region(LeafTex,Rect2(part.p,SIZE),Rect2(Vector2.RIGHT*part.f*SIZE.x,SIZE),c)
