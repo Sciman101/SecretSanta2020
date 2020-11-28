@@ -37,7 +37,7 @@ func pull(direction:Vector2,delta) -> Vector2:
 	return direction
 "
 
-[sub_resource type="GDScript" id=5]
+[sub_resource type="GDScript" id=3]
 script/source = "extends KinematicBody2D
 
 export var move_speed : float
@@ -61,7 +61,7 @@ func pull(direction:Vector2,delta) -> Vector2:
 	return direction
 "
 
-[sub_resource type="GDScript" id=3]
+[sub_resource type="GDScript" id=4]
 script/source = "extends KinematicBody2D
 
 func _physics_process(delta:float) -> void:
@@ -75,7 +75,7 @@ func pull(direction:Vector2,delta:float) -> Vector2:
 	return direction
 "
 
-[sub_resource type="CircleShape2D" id=4]
+[sub_resource type="CircleShape2D" id=5]
 radius = 16.0
 
 [node name="Test1" type="Node2D"]
@@ -84,7 +84,7 @@ radius = 16.0
 tile_set = ExtResource( 1 )
 cell_size = Vector2( 16, 16 )
 format = 1
-tile_data = PoolIntArray( 0, 7, 0, 2, 7, 0, 4, 7, 0, 6, 7, 0, 8, 7, 0, 10, 7, 0, 12, 7, 0, 14, 7, 0, 16, 7, 0, 18, 7, 0, 20, 7, 0, 22, 7, 0, 24, 7, 0, 26, 7, 0, 28, 7, 0, 30, 7, 0, 32, 7, 0, 34, 7, 0, 36, 7, 0, 38, 7, 0, 131072, 7, 0, 131110, 7, 0, 262144, 7, 0, 262182, 7, 0, 393216, 7, 0, 393227, 4, 0, 393254, 7, 0, 524288, 7, 0, 524326, 7, 0, 655360, 7, 0, 655369, 4, 0, 655370, 4, 0, 655371, 4, 0, 655372, 4, 0, 655373, 4, 0, 655374, 4, 0, 655398, 7, 0, 786432, 7, 0, 786470, 7, 0, 851970, 4, 0, 851971, 4, 0, 851972, 4, 0, 851973, 4, 0, 917504, 7, 0, 917506, 4, 0, 917507, 4, 0, 917508, 4, 0, 917509, 4, 0, 917531, 4, 0, 917536, 7, 0, 917542, 7, 0, 1048576, 7, 0, 1048608, 4, 0, 1048609, 4, 0, 1048614, 7, 0, 1114134, 7, 0, 1114144, 4, 0, 1114145, 4, 0, 1179648, 7, 0, 1179655, 4, 0, 1179656, 4, 0, 1179657, 7, 0, 1179665, 7, 0, 1179679, 7, 0, 1179681, 7, 0, 1179686, 7, 0, 1245191, 4, 0, 1245192, 4, 0, 1245214, 4, 0, 1310720, 7, 0, 1310725, 4, 0, 1310726, 7, 0, 1310728, 7, 0, 1310730, 7, 0, 1310732, 4, 0, 1310758, 7, 0, 1376260, 4, 0, 1376261, 4, 0, 1376268, 4, 0, 1376269, 4, 0, 1376270, 4, 0, 1441792, 7, 0, 1441794, 7, 0, 1441796, 7, 0, 1441798, 7, 0, 1441800, 7, 0, 1441802, 7, 0, 1441804, 7, 0, 1441806, 7, 0, 1441808, 7, 0, 1441810, 7, 0, 1441812, 7, 0, 1441814, 7, 0, 1441816, 7, 0, 1441818, 7, 0, 1441820, 7, 0, 1441822, 7, 0, 1441824, 7, 0, 1441826, 7, 0, 1441828, 7, 0, 1441830, 7, 0 )
+tile_data = PoolIntArray( 0, 7, 0, 2, 7, 0, 4, 7, 0, 6, 7, 0, 8, 7, 0, 10, 7, 0, 12, 7, 0, 14, 7, 0, 16, 7, 0, 18, 7, 0, 20, 7, 0, 22, 7, 0, 24, 7, 0, 26, 7, 0, 28, 7, 0, 30, 7, 0, 32, 7, 0, 34, 7, 0, 36, 7, 0, 38, 7, 0, 131072, 7, 0, 131110, 7, 0, 262144, 7, 0, 262182, 7, 0, 393216, 7, 0, 393254, 7, 0, 524288, 7, 0, 524326, 7, 0, 655360, 7, 0, 655398, 7, 0, 786432, 7, 0, 786470, 7, 0, 917504, 7, 0, 917542, 7, 0, 1048576, 7, 0, 1048614, 7, 0, 1179648, 7, 0, 1179686, 7, 0, 1310720, 7, 0, 1310758, 7, 0, 1441792, 7, 0, 1441794, 7, 0, 1441796, 7, 0, 1441798, 7, 0, 1441800, 7, 0, 1441802, 7, 0, 1441804, 7, 0, 1441806, 7, 0, 1441808, 7, 0, 1441810, 7, 0, 1441812, 7, 0, 1441814, 7, 0, 1441816, 7, 0, 1441818, 7, 0, 1441820, 7, 0, 1441822, 7, 0, 1441824, 7, 0, 1441826, 7, 0, 1441828, 7, 0, 1441830, 7, 0 )
 
 [node name="Block" type="KinematicBody2D" parent="." groups=[
 "Grabbable",
@@ -120,7 +120,7 @@ texture = ExtResource( 2 )
 "Grabbable",
 ]]
 position = Vector2( 288.837, 91.1314 )
-script = SubResource( 5 )
+script = SubResource( 3 )
 move_speed = 50.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="SlidingBlock"]
@@ -134,14 +134,14 @@ texture = ExtResource( 2 )
 "Grabbable",
 ]]
 position = Vector2( 166.35, -51.4772 )
-script = SubResource( 3 )
+script = SubResource( 4 )
 
 [node name="Sprite" type="Sprite" parent="Rotator"]
 scale = Vector2( 0.125, 0.125 )
 texture = ExtResource( 7 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Rotator"]
-shape = SubResource( 4 )
+shape = SubResource( 5 )
 
 [node name="Player" parent="." instance=ExtResource( 3 )]
 position = Vector2( 136.5, 238 )
