@@ -48,10 +48,12 @@ tracks/0/keys = {
 "values": [ 0, 1, 2, 3, 4, 5, 6, 7 ]
 }
 
-[node name="Player" type="KinematicBody2D"]
+[node name="Player" type="KinematicBody2D" groups=[
+"Player",
+]]
 collision_layer = 2
 script = ExtResource( 3 )
-move_speed = 100.0
+move_speed = 125.0
 acceleration_time = 0.1
 air_acceleration_time = 0.2
 friction_time = 0.05
@@ -59,7 +61,6 @@ jump_height = 48.0
 jump_apex_time = 0.35
 falling_grav_multiplier = 1.5
 min_jump_speed = 100.0
-max_air_jumps = 1
 throw_speed = 1500.0
 jump_buffer_time = 0.1
 edge_buffer_time = 0.2
@@ -68,6 +69,7 @@ edge_buffer_time = 0.2
 script = ExtResource( 2 )
 max_rope_length = 128.0
 max_stretch = 16.0
+player_motion_multiplier = 1.4
 
 [node name="Ray" type="RayCast2D" parent="Rope"]
 
@@ -88,6 +90,7 @@ joint_mode = 2
 script = ExtResource( 7 )
 wobble_curve = SubResource( 1 )
 wobble_intensity = 16.0
+max_rope_length = 300.0
 
 [node name="GrapppleCheck" type="RayCast2D" parent="Grapple"]
 

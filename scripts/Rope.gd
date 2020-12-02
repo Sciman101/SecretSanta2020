@@ -7,7 +7,7 @@ var particles
 
 export var max_rope_length : float # Longest the rope can be
 export var max_stretch : float # How much can the rope stretch
-export var shot_gravity : float
+export var player_motion_multiplier : float
 
 var extended : bool = false # Is the rope extended?
 
@@ -50,8 +50,6 @@ func _process(delta):
 func _physics_process(delta:float) -> void:
 	if extended:
 		
-		var loose = Input.is_mouse_button_pressed(BUTTON_RIGHT)
-		
 		player.modulate = Color.white
 		
 		# Clamp player position to within the rope radius
@@ -62,8 +60,9 @@ func _physics_process(delta:float) -> void:
 		var slack = difference.length()
 		
 		# If we're holding right mouse, let the rope resize
-		if loose:
-			dangle_point.length_to_next = slack
+#		var loose = Input.is_mouse_button_pressed(BUTTON_RIGHT)
+#		if loose:
+#			dangle_point.length_to_next = slack
 		
 		# Are we stretching the rope?
 		if slack > dangle_point.length_to_next:
@@ -163,13 +162,19 @@ func clamp_velocity_normal(velocity:Vector2,norm:Vector2) -> Vector2:
 
 # Start the grapple
 func attach_grapple(point:Vector2,relative) -> void:
+	
+	# If relative is null, then we undershot and missed
+	if relative == null:
+		create_leaf_particles(global_position,point)
+		return
+	
 	extended = true
 	
 	if not relative.is_in_group("Grabbable"):
 		relative = null
 	
 	# Create rope point
-	var rp = RopePoint.new(point,relative,point.distance_to(player.global_position))
+	var rp = RopePoint.new(point,relative,point.distance_to(player.global_position)-4) # Subtract a tiny bit so it's easier to swing from the ground without touching the floor
 	
 	# Stick and update length
 	rope_points.append(rp)
@@ -186,17 +191,24 @@ func detach_grapple() -> void:
 	
 	# Create particles
 	for i in range(-1,rope_points.size()-1):
-		
 		var pos1 = player.global_position if i == -1 else rope_points[i].world_pos()
 		var pos2 = rope_points[i+1].world_pos()
-		var dist = floor(pos1.distance_to(pos2))* .2
-		# Loop over the length of the segment
-		for j in range(dist):
-			particles.add_particle(lerp(pos1,pos2,float(j)/dist)+Vector2(rand_range(-4,4),rand_range(-4,4)),player.motion * 0.2 * (float(abs(i))/rope_points.size()) * (1-(float(j)/dist)))
+		create_leaf_particles(pos1,pos2)
 	
 	# Drop the rope
 	rope_points.clear()
 	rope.clear_points()
+	
+	# Amplify player motion slightly
+	player.motion *= player_motion_multiplier
+
+
+# Create a line of leaf particles
+func create_leaf_particles(from:Vector2,to:Vector2) -> void:
+	var dist = floor(from.distance_to(to))* .2
+	# Loop over the length of the segment
+	for j in range(dist):
+		particles.add_particle(lerp(from,to,float(j)/dist)+Vector2(rand_range(-4,4),rand_range(-4,4)),player.motion * 0.1 * (1-(float(j)/dist)))
 
 
 # Are we hanging?

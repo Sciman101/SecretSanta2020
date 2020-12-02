@@ -16,7 +16,7 @@ _global_script_class_icons={
 [application]
 
 config/name="SecretSanta"
-run/main_scene="res://scenes/Test1.tscn"
+run/main_scene="res://scenes/Level.tscn"
 config/icon="res://textures/icon.png"
 
 [autoload]

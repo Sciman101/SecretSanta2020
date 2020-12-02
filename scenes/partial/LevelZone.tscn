@@ -1,0 +1,21 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://scripts/LevelZone.gd" type="Script" id=1]
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 320, 180 )
+
+[node name="LevelZone" type="Area2D"]
+script = ExtResource( 1 )
+__meta__ = {
+"_editor_description_": "The level zone indicates what actually counts as a level.
+Instances parented to it will reset when the zone is reloaded, by calling a 'roomReloaded' method, provided the node has one"
+}
+
+[node name="LevelShape" type="CollisionShape2D" parent="."]
+modulate = Color( 1, 1, 1, 0.196078 )
+shape = SubResource( 1 )
+
+[node name="CameraStart" type="Position2D" parent="."]
+[connection signal="body_entered" from="." to="." method="_on_LevelZone_body_entered"]
+[connection signal="body_exited" from="." to="." method="_on_LevelZone_body_exited"]

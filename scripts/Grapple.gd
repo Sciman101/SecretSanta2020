@@ -8,11 +8,13 @@ onready var hook := $GrapppleCheck
 export var wobble_curve : Curve
 export var wobble_intensity : float
 
-var motion : Vector2
-var thrown : bool = false # Has the hook been thrown?
-var shot_time : float
+export var max_rope_length : float
 
-# Emitted when we hit something
+var motion : Vector2 # Grappling hook motion
+var thrown : bool = false # Has the hook been thrown?
+var shot_time : float # Used for animation
+
+# Emitted when we hit something. if thing is null we missed
 signal grapple_hit(position,thing)
 
 func _ready() -> void:
@@ -38,6 +40,11 @@ func _physics_process(delta:float) -> void:
 		
 		hook.position += motion * delta
 		hook.cast_to = motion * delta
+		
+		# Are we beyond the max length?
+		if hook.position.length_squared() > max_rope_length * max_rope_length:
+			emit_signal("grapple_hit",hook.global_position,null)
+			end_throw()
 
 
 # Recalculate the viuals for the hook
