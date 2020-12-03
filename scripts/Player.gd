@@ -21,6 +21,8 @@ export var edge_buffer_time : float # How late can we press jump
 onready var rope := $Rope
 onready var grapple := $Grapple
 
+onready var sfx_step := $SFX/Step
+
 onready var sprite := $Sprite
 onready var animation := $AnimationPlayer
 onready var dust := $DustParticles
@@ -95,6 +97,7 @@ func _handle_movement(delta:float) -> void:
 			# Detach rope
 			rope.detach_grapple()
 		elif not grapple.thrown:
+			# Toss it
 			var dir = (get_global_mouse_position() - global_position).normalized()
 			grapple.throw(dir*throw_speed)
 	
@@ -158,6 +161,8 @@ func _handle_movement(delta:float) -> void:
 	if grounded and not was_grounded:
 		edge_buffer = edge_buffer_time
 		air_jumps = 0
+		if not sfx_step.is_playing():
+			sfx_step.play()
 	
 	if jump_buffer > 0: jump_buffer = max(jump_buffer-delta,0)
 	if edge_buffer > 0: edge_buffer = max(edge_buffer-delta,0)

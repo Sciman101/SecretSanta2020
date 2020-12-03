@@ -4,6 +4,10 @@ const NUM_LINE_POINTS := 50
 
 onready var hook := $GrapppleCheck
 
+#SFX
+onready var sfx_whip_a = $"../SFX/WhipA"
+onready var sfx_whip_b = $"../SFX/WhipB"
+
 # Used for visuals
 export var wobble_curve : Curve
 export var wobble_intensity : float
@@ -70,6 +74,9 @@ func throw(mot:Vector2) -> void:
 	motion = mot
 	thrown = true
 	shot_time = 0
+	
+	sfx_whip_a.play()
+	sfx_whip_b.play()
 	
 	hook.position = Vector2.ZERO
 	hook.cast_to = motion.normalized() * 32

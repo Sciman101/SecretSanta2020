@@ -1,8 +1,13 @@
 extends Node2D
 
+const CREAK_ANGLE := (3.0/2)*PI
+
 onready var rope := $RopeViz
 onready var wrap_ray := $Ray
 onready var player : KinematicBody2D = get_parent()
+
+onready var sfx_creak := $"../SFX/Creak"
+
 var particles
 
 export var max_rope_length : float # Longest the rope can be
@@ -81,6 +86,11 @@ func _physics_process(delta:float) -> void:
 			player.move_and_collide(nudge.normalized() * (slack - dangle_point.length_to_next))
 			# Clamp the player's velocity. This means we can't stretch the rope, and it also creates the momentum effect
 			player.motion = clamp_velocity_normal(player.motion,difference.normalized())
+			
+			# Check for creaking sfx trigger
+			if abs(player.motion.x) > 150:
+				if abs(get_angle()+CREAK_ANGLE-PI) < 0.1 and not sfx_creak.is_playing():
+					sfx_creak.play()
 			
 			#player.modulate = Color.red
 		

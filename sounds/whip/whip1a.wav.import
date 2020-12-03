@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/whip1a.wav-b9fdbf5b3e79386ba07857c881344613.sample"
+
+[deps]
+
+source_file="res://sounds/whip/whip1a.wav"
+dest_files=[ "res://.import/whip1a.wav-b9fdbf5b3e79386ba07857c881344613.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=true
+edit/loop=false
+compress/mode=0
