@@ -3,6 +3,7 @@ extends Line2D
 const NUM_LINE_POINTS := 50
 
 onready var hook := $GrapppleCheck
+onready var player := get_parent()
 
 #SFX
 onready var sfx_whip_a = $"../SFX/WhipA"
@@ -42,7 +43,8 @@ func _physics_process(delta:float) -> void:
 			emit_signal("grapple_hit",hook.get_collision_point(),hook.get_collider())
 			end_throw()
 		
-		hook.position += motion * delta
+		# Move hook, subtracting player motion so we don't get pulled down
+		hook.position += (motion - player.motion) * delta
 		hook.cast_to = motion * delta
 		
 		# Are we beyond the max length?

@@ -2,12 +2,12 @@
 
 importer="wav"
 type="AudioStreamSample"
-path="res://.import/creak.wav-54d84fbb7a2f511f9c8ccd10ff78fc19.sample"
+path="res://.import/creak-03.wav-208762b80c34ecc4402683ed6ab8dd27.sample"
 
 [deps]
 
-source_file="res://sounds/creak.wav"
-dest_files=[ "res://.import/creak.wav-54d84fbb7a2f511f9c8ccd10ff78fc19.sample" ]
+source_file="res://sounds/creak/creak-03.wav"
+dest_files=[ "res://.import/creak-03.wav-208762b80c34ecc4402683ed6ab8dd27.sample" ]
 
 [params]
 

@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=2]
+[gd_scene load_steps=26 format=2]
 
 [ext_resource path="res://textures/Player.png" type="Texture" id=1]
 [ext_resource path="res://scripts/Rope.gd" type="Script" id=2]
@@ -16,6 +16,10 @@
 [ext_resource path="res://sounds/steps/step-01.wav" type="AudioStream" id=14]
 [ext_resource path="res://sounds/steps/step-03.wav" type="AudioStream" id=15]
 [ext_resource path="res://sounds/steps/step-02.wav" type="AudioStream" id=16]
+[ext_resource path="res://sounds/creak/creak-03.wav" type="AudioStream" id=17]
+[ext_resource path="res://textures/light.png" type="Texture" id=18]
+[ext_resource path="res://sounds/creak/creak-01.wav" type="AudioStream" id=19]
+[ext_resource path="res://sounds/creak/creak-02.wav" type="AudioStream" id=20]
 
 [sub_resource type="Curve" id=1]
 _data = [ Vector2( 0, 0 ), 0.0, 0.0, 0, 0, Vector2( 0.956044, 1 ), 0.0815622, -0.0324422, 0, 0, Vector2( 1, 0 ), 0.0, 0.0, 0, 0 ]
@@ -101,6 +105,7 @@ player_motion_multiplier = 1.4
 [node name="Ray" type="RayCast2D" parent="Rope"]
 
 [node name="RopeViz" type="Line2D" parent="Rope"]
+light_mask = -2147483646
 points = PoolVector2Array( 0, 0, 0, 0 )
 width = 8.0
 default_color = Color( 1, 1, 1, 1 )
@@ -109,6 +114,7 @@ texture_mode = 1
 joint_mode = 2
 
 [node name="Grapple" type="Line2D" parent="."]
+light_mask = 2
 width = 8.0
 default_color = Color( 1, 1, 1, 1 )
 texture = ExtResource( 4 )
@@ -137,9 +143,15 @@ scale_amount_random = 0.5
 scale_amount_curve = SubResource( 2 )
 
 [node name="Sprite" type="Sprite" parent="."]
+light_mask = 2
 texture = ExtResource( 1 )
 vframes = 2
 hframes = 8
+
+[node name="Light2D" type="Light2D" parent="."]
+texture = ExtResource( 18 )
+energy = 0.5
+shadow_enabled = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2( 0, 3 )
@@ -157,14 +169,12 @@ bus = "SFX"
 script = ExtResource( 6 )
 stream_pool = [ ExtResource( 14 ), ExtResource( 16 ), ExtResource( 15 ) ]
 pitch_min = 0.5
-pitch_max = 1.0
 
 [node name="Creak" type="AudioStreamPlayer" parent="SFX"]
 bus = "SFX"
 script = ExtResource( 6 )
-stream_pool = [ ExtResource( 9 ) ]
-pitch_min = 1.0
-pitch_max = 2.0
+stream_pool = [ ExtResource( 19 ), ExtResource( 20 ), ExtResource( 17 ) ]
+pitch_max = 1.4
 
 [node name="WhipA" type="AudioStreamPlayer" parent="SFX"]
 bus = "SFX"

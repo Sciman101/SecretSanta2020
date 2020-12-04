@@ -88,8 +88,8 @@ func _physics_process(delta:float) -> void:
 			player.motion = clamp_velocity_normal(player.motion,difference.normalized())
 			
 			# Check for creaking sfx trigger
-			if abs(player.motion.x) > 150:
-				if abs(get_angle()+CREAK_ANGLE-PI) < 0.1 and not sfx_creak.is_playing():
+			if abs(player.motion.x) > 100:
+				if abs(get_angle()+CREAK_ANGLE-PI) < 0.25 and not sfx_creak.is_playing():
 					sfx_creak.play()
 			
 			#player.modulate = Color.red
@@ -195,15 +195,22 @@ func attach_grapple(point:Vector2,relative) -> void:
 	rope.add_point(player.global_position)
 
 
+# Try and retract the rope
+func try_retract(amt:float) -> void:
+	if extended:
+		rope_points[0].length_to_next -= amt
+
+
 # Stop the grapple
-func detach_grapple() -> void:
+func detach_grapple(show_particles:bool=true) -> void:
 	extended = false
 	
 	# Create particles
-	for i in range(-1,rope_points.size()-1):
-		var pos1 = player.global_position if i == -1 else rope_points[i].world_pos()
-		var pos2 = rope_points[i+1].world_pos()
-		create_leaf_particles(pos1,pos2)
+	if show_particles:
+		for i in range(-1,rope_points.size()-1):
+			var pos1 = player.global_position if i == -1 else rope_points[i].world_pos()
+			var pos2 = rope_points[i+1].world_pos()
+			create_leaf_particles(pos1,pos2)
 	
 	# Drop the rope
 	rope_points.clear()

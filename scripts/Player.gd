@@ -44,7 +44,10 @@ var grounded : bool
 var was_grounded : bool
 var air_jumps : int
 
-var standing_on
+var standing_on # What are we standing on?
+
+var current_zone # The current level zone
+
 
 func _ready() -> void:
 	_calculate_movement_params()
@@ -65,6 +68,27 @@ func _input(event):
 
 func _physics_process(delta:float) -> void:
 	_handle_movement(delta)
+	
+	if Input.is_action_just_pressed("restart_zone"):
+		respawn()
+
+
+# Respawn the player
+func respawn() -> void:
+	rope.detach_grapple(false)
+	grapple.end_throw()
+	
+	motion = Vector2.ZERO
+	sprite.rotation = 0
+	if current_zone:
+		global_position = current_zone.spawn_pos.global_position
+		sprite.flip_h = sign(current_zone.spawn_pos.scale.x) == -1
+	
+	# Particles
+	if rope and rope.particles:
+		for i in range(64):
+			var r = Vector2(rand_range(-16,16),rand_range(-16,16))
+			rope.particles.add_particle(global_position+r,r.normalized()*16)
 
 
 # Calculate jump vars using projectile motion and acceleration
@@ -100,6 +124,11 @@ func _handle_movement(delta:float) -> void:
 			# Toss it
 			var dir = (get_global_mouse_position() - global_position).normalized()
 			grapple.throw(dir*throw_speed)
+	
+	# Retract
+	if Input.is_action_pressed("retract"):
+		if rope.extended:
+			rope.try_retract(delta*32)
 	
 	# Get horizontal input
 	var hor := 0.0
@@ -141,7 +170,11 @@ func _handle_movement(delta:float) -> void:
 		if hor == 0:
 			acc = 0
 		else:
-			acc = _air_acceleration
+			# Only accelerate if we're not at peak speed
+			if abs(motion.x) <= move_speed or hor != sign(motion.x):
+				acc = _air_acceleration
+			else:
+				acc = 0
 	
 	if not grounded and rope.is_hanging():
 		# If grappling, free acceleration
