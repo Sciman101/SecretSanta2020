@@ -178,7 +178,6 @@ frame = 16
 
 [node name="Light2D" type="Light2D" parent="."]
 texture = ExtResource( 18 )
-energy = 0.5
 shadow_enabled = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]

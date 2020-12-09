@@ -4,6 +4,7 @@
 [ext_resource path="res://scripts/Cursor.gd" type="Script" id=2]
 
 [node name="Cursor" type="Sprite"]
+z_index = 4096
 texture = ExtResource( 1 )
 hframes = 4
 script = ExtResource( 2 )
