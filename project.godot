@@ -31,6 +31,8 @@ window/size/height=360
 window/size/resizable=false
 window/size/test_width=1280
 window/size/test_height=720
+mouse_cursor/custom_image="res://textures/Cursor.png"
+mouse_cursor/custom_image_hotspot=Vector2( 12, 12 )
 window/stretch/mode="viewport"
 window/stretch/aspect="keep"
 

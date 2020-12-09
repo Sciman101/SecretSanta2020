@@ -110,6 +110,7 @@ func _physics_process(delta:float) -> void:
 				player.hitstun = 0.1
 				Game.game_camera.add_screenshake(8,0.1)
 				sfx_snip.play()
+				Game.set_cursor(Game.CURSOR_DISABLED)
 				return
 			
 			# Get the point and add it to the list
@@ -205,6 +206,8 @@ func attach_grapple(point:Vector2,relative) -> void:
 	rope.clear_points()
 	rope.add_point(point)
 	rope.add_point(player.global_position)
+	
+	Game.set_cursor(Game.CURSOR_LOCKED)
 
 
 # Try and retract the rope
@@ -230,6 +233,8 @@ func detach_grapple(show_particles:bool=true) -> void:
 	
 	# Amplify player motion slightly
 	player.motion *= player_motion_multiplier
+	
+	Game.set_cursor(Game.CURSOR_NORMAL)
 
 
 # Create a line of leaf particles

@@ -128,8 +128,8 @@ func _handle_movement(delta:float) -> void:
 	grounded = is_on_floor()
 	
 	# Throw
-	if Input.is_action_just_pressed("grapple"):
-		if rope.extended and not stunned:
+	if Input.is_action_just_pressed("grapple") and not stunned:
+		if rope.extended:
 			# Detach rope
 			rope.detach_grapple()
 		elif not grapple.thrown:
@@ -210,7 +210,10 @@ func _handle_movement(delta:float) -> void:
 	if grounded and not was_grounded:
 		edge_buffer = edge_buffer_time
 		air_jumps = 0
-		stunned = false
+		# Clear stun
+		if stunned:
+			stunned = false
+			Game.set_cursor(Game.CURSOR_NORMAL)
 		if not sfx_step.is_playing():
 			sfx_step.play()
 	

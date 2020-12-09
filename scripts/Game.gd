@@ -1,10 +1,22 @@
 extends Node
 
+const CURSOR_NORMAL := 0
+const CURSOR_DARK := 1
+const CURSOR_LOCKED := 2
+const CURSOR_DISABLED := 3
+
 var game_camera # Reference to the level camera
+var cursor
 
 func _ready():
 	# Used so other nodes have reference to the camera
 	game_camera = get_tree().get_nodes_in_group("Camera")[0]
+
+func set_cursor(frame:int) -> void:
+	if cursor:
+		cursor.frame = frame
+	else:
+		print('Attempting to set cursor frame with no cursor!')
 
 # Key shortcuts
 func _input(event):
