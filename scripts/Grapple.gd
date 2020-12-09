@@ -1,4 +1,6 @@
 extends Line2D
+
+const SPIKE_LAYER := 2
 # The actual 'hook' part of the grapple
 const NUM_LINE_POINTS := 50
 
@@ -7,7 +9,6 @@ onready var player := get_parent()
 
 #SFX
 onready var sfx_whip_a = $"../SFX/WhipA"
-onready var sfx_whip_b = $"../SFX/WhipB"
 
 # Used for visuals
 export var wobble_curve : Curve
@@ -39,6 +40,14 @@ func _physics_process(delta:float) -> void:
 		
 		hook.force_raycast_update()
 		if hook.is_colliding():
+			
+			# Check for spikes
+			if hook.get_collider() and hook.get_collider().collision_layer & SPIKE_LAYER != 0:
+				# We hit a spike, stop the rope
+				emit_signal("grapple_hit",hook.global_position,null)
+				end_throw()
+				return
+			
 			# We must have hit something
 			emit_signal("grapple_hit",hook.get_collision_point(),hook.get_collider())
 			end_throw()
@@ -78,7 +87,6 @@ func throw(mot:Vector2) -> void:
 	shot_time = 0
 	
 	sfx_whip_a.play()
-	sfx_whip_b.play()
 	
 	hook.position = Vector2.ZERO
 	hook.cast_to = motion.normalized() * 32

@@ -22,6 +22,7 @@ onready var rope := $Rope
 onready var grapple := $Grapple
 
 onready var sfx_step := $SFX/Step
+onready var sfx_death := $SFX/Death
 
 onready var sprite := $Sprite
 onready var animation := $AnimationPlayer
@@ -46,6 +47,9 @@ var air_jumps : int
 
 var standing_on # What are we standing on?
 
+var stunned : bool = false
+var hitstun : float
+
 var current_zone # The current level zone
 
 
@@ -67,16 +71,24 @@ func _input(event):
 
 
 func _physics_process(delta:float) -> void:
-	_handle_movement(delta)
 	
-	if Input.is_action_just_pressed("restart_zone"):
-		respawn()
+	if hitstun <= 0:
+		_handle_movement(delta)
+		
+		if Input.is_action_just_pressed("restart_zone") and not stunned:
+			respawn()
+	else:
+		hitstun -= delta
+		animation.stop()
+		sprite.frame = 17
 
 
 # Respawn the player
 func respawn() -> void:
 	rope.detach_grapple(false)
 	grapple.end_throw()
+	
+	sfx_death.play()
 	
 	motion = Vector2.ZERO
 	sprite.rotation = 0
@@ -117,7 +129,7 @@ func _handle_movement(delta:float) -> void:
 	
 	# Throw
 	if Input.is_action_just_pressed("grapple"):
-		if rope.extended:
+		if rope.extended and not stunned:
 			# Detach rope
 			rope.detach_grapple()
 		elif not grapple.thrown:
@@ -154,12 +166,16 @@ func _handle_movement(delta:float) -> void:
 			animation.stop()
 			sprite.frame = 0
 	
-	var target_angle := 0.0
-	
-	if not grounded and not was_grounded:
-		if rope.extended:
-			target_angle = rope.get_angle() + HALF_PI
-	sprite.rotation = lerp_angle(sprite.rotation,target_angle,delta*10)
+	if not stunned:
+		var target_angle := 0.0
+		
+		if not grounded and not was_grounded:
+			if rope.extended:
+				target_angle = rope.get_angle() + HALF_PI
+		sprite.rotation = lerp_angle(sprite.rotation,target_angle,delta*10)
+	else:
+		sprite.rotation += delta * 25
+		animation.play("Panic")
 	
 	# Determine acceleration
 	var acc = _acceleration
@@ -194,6 +210,7 @@ func _handle_movement(delta:float) -> void:
 	if grounded and not was_grounded:
 		edge_buffer = edge_buffer_time
 		air_jumps = 0
+		stunned = false
 		if not sfx_step.is_playing():
 			sfx_step.play()
 	
@@ -223,7 +240,12 @@ func _handle_movement(delta:float) -> void:
 	standing_on = null
 	for i in range(get_slide_count()):
 		var c = get_slide_collision(i)
+		# Check for ground
 		if c.normal == Vector2.UP and not (standing_on != null and standing_on is KinematicBody2D):
 			standing_on = c.collider
+		# Check for spikes
+		if c.collider and c.collider.collision_layer & 2 != 0:
+			# Uh oh
+			respawn()
 	
 	was_grounded = grounded

@@ -1,5 +1,6 @@
 extends Node2D
 
+const SPIKE_LAYER := 2
 const CREAK_ANGLE := (3.0/2)*PI
 
 onready var rope := $RopeViz
@@ -7,6 +8,7 @@ onready var wrap_ray := $Ray
 onready var player : KinematicBody2D = get_parent()
 
 onready var sfx_creak := $"../SFX/Creak"
+onready var sfx_snip := $"../SFX/Snip"
 
 var particles
 
@@ -99,6 +101,16 @@ func _physics_process(delta:float) -> void:
 		wrap_ray.cast_to = global_transform.xform_inv(dangle_point.world_pos()) * 0.9
 		wrap_ray.force_raycast_update()
 		if wrap_ray.is_colliding():
+			
+			# Check for spikes
+			if wrap_ray.get_collider() and wrap_ray.get_collider().collision_layer & SPIKE_LAYER != 0:
+				# Break the connection
+				detach_grapple()
+				player.stunned = true
+				player.hitstun = 0.1
+				Game.game_camera.add_screenshake(8,0.1)
+				sfx_snip.play()
+				return
 			
 			# Get the point and add it to the list
 			var pos = wrap_ray.get_collision_point()

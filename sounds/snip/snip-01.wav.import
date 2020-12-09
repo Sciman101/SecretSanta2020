@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/snip-01.wav-d3d1db4f587ae4d218ec2baf0ded6496.sample"
+
+[deps]
+
+source_file="res://sounds/snip/snip-01.wav"
+dest_files=[ "res://.import/snip-01.wav-d3d1db4f587ae4d218ec2baf0ded6496.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0
