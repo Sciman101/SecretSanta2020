@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/Tiles.png-183116b712949f256d03e83428f2a45b.stex"
+path="res://.import/Thorns.png-baa699853af11b9f8436fd0e806c1f6e.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://textures/Tiles.png"
-dest_files=[ "res://.import/Tiles.png-183116b712949f256d03e83428f2a45b.stex" ]
+source_file="res://textures/environment/Thorns.png"
+dest_files=[ "res://.import/Thorns.png-baa699853af11b9f8436fd0e806c1f6e.stex" ]
 
 [params]
 

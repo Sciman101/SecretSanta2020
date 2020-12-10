@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/Vine.png-e8bfa7ddc5fc673555c3881a9055ee44.stex"
+path="res://.import/Dust.png-e95ac5e9c4a4fe7bb380c8e126ee9cae.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://textures/Vine.png"
-dest_files=[ "res://.import/Vine.png-e8bfa7ddc5fc673555c3881a9055ee44.stex" ]
+source_file="res://textures/fx/Dust.png"
+dest_files=[ "res://.import/Dust.png-e95ac5e9c4a4fe7bb380c8e126ee9cae.stex" ]
 
 [params]
 
@@ -19,7 +19,7 @@ compress/lossy_quality=0.7
 compress/hdr_mode=0
 compress/bptc_ldr=0
 compress/normal_map=0
-flags/repeat=1
+flags/repeat=0
 flags/filter=false
 flags/mipmaps=false
 flags/anisotropic=false

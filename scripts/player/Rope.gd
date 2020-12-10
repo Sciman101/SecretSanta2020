@@ -35,7 +35,7 @@ func _ready() -> void:
 	# Setup particles
 	particles = Node2D.new()
 	particles.name = "LeafParticles"
-	particles.set_script(load("res://scripts/LeafParticles.gd"))
+	particles.set_script(load("res://scripts/fx/LeafParticles.gd"))
 	player.get_parent().call_deferred('add_child',particles)
 
 

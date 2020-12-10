@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/Leaves.png-92409b768327d3abe96d428a1c7f827f.stex"
+path="res://.import/light.png-e2798f004aeebe022eea3394f6496eeb.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://textures/Leaves.png"
-dest_files=[ "res://.import/Leaves.png-92409b768327d3abe96d428a1c7f827f.stex" ]
+source_file="res://textures/fx/light.png"
+dest_files=[ "res://.import/light.png-e2798f004aeebe022eea3394f6496eeb.stex" ]
 
 [params]
 

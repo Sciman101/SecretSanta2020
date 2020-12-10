@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/Pickup.png-78d873d37e8db8fd023054d6635c99f2.stex"
+path="res://.import/Petal.png-0f34b7b0f67994c855aece63e1d43f09.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://textures/Pickup.png"
-dest_files=[ "res://.import/Pickup.png-78d873d37e8db8fd023054d6635c99f2.stex" ]
+source_file="res://textures/fx/Petal.png"
+dest_files=[ "res://.import/Petal.png-0f34b7b0f67994c855aece63e1d43f09.stex" ]
 
 [params]
 

@@ -6,19 +6,22 @@ const CURSOR_LOCKED := 2
 const CURSOR_DISABLED := 3
 
 var game_camera # Reference to the level camera
-var cursor
+var cursor # Reference to the cursor
+var hud
 
-func _ready():
-	# Used so other nodes have reference to the camera
-	var c = get_tree().get_nodes_in_group("Camera")
-	if len(c) > 0:
-		game_camera = c[0]
+var flowers_collected := 0
 
 func set_cursor(frame:int) -> void:
 	if cursor:
 		cursor.frame = frame
 	else:
 		print('Attempting to set cursor frame with no cursor!')
+
+
+func on_collect_flower() -> void:
+	flowers_collected += 1
+	hud.show_flower_count()
+
 
 # Key shortcuts
 func _input(event):

@@ -1,6 +1,6 @@
 extends Node2D
 
-const LeafTex = preload("res://textures/Leaves.png")
+const LeafTex = preload("res://textures/fx/Leaves.png")
 const SIZE = Vector2.ONE * 8
 
 const MIN_LIFETIME = 0.5

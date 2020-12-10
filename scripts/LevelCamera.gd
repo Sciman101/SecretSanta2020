@@ -5,6 +5,10 @@ var screenshake_time : float
 
 onready var tween = $Tween
 
+
+func _ready() -> void:
+	Game.game_camera = self
+
 # Tell the camera to go somewhere
 func tween_to(pos:Vector2,time:float=0.4,delay:float=0.1) -> void:
 	tween.stop(self,'position')

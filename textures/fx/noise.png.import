@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/Dust.png-c83e204b32667500bf3e702205a0f703.stex"
+path="res://.import/noise.png-32ef4dea2e1be4a31ae3f385567a0b5c.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://textures/Dust.png"
-dest_files=[ "res://.import/Dust.png-c83e204b32667500bf3e702205a0f703.stex" ]
+source_file="res://textures/fx/noise.png"
+dest_files=[ "res://.import/noise.png-32ef4dea2e1be4a31ae3f385567a0b5c.stex" ]
 
 [params]
 
