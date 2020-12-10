@@ -10,7 +10,9 @@ var cursor
 
 func _ready():
 	# Used so other nodes have reference to the camera
-	game_camera = get_tree().get_nodes_in_group("Camera")[0]
+	var c = get_tree().get_nodes_in_group("Camera")
+	if len(c) > 0:
+		game_camera = c[0]
 
 func set_cursor(frame:int) -> void:
 	if cursor:

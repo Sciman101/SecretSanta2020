@@ -131,8 +131,8 @@ func _physics_process(delta:float) -> void:
 			var v1 = (rope_points[0].world_pos() - rope_points[1].world_pos()).normalized()
 			var v2 = (player.global_position - rope_points[1].world_pos()).normalized()
 			
-			DebugDraw.line(rope_points[1].world_pos(),rope_points[1].world_pos()+v1*16,Color.red)
-			DebugDraw.line(rope_points[1].world_pos(),rope_points[1].world_pos()+v2*16,Color.red)
+			#DebugDraw.line(rope_points[1].world_pos(),rope_points[1].world_pos()+v1*16,Color.red)
+			#DebugDraw.line(rope_points[1].world_pos(),rope_points[1].world_pos()+v2*16,Color.red)
 			
 			if v1.dot(v1) >= 0.5:
 			
@@ -153,8 +153,8 @@ func _physics_process(delta:float) -> void:
 					wrap_ray.force_raycast_update()
 					wrap_ray.position = Vector2.ZERO
 					
-					DebugDraw.line(rope_points[1].world_pos(),player.global_position,Color.red)
-					DebugDraw.line(origin,end,Color.red)
+					#DebugDraw.line(rope_points[1].world_pos(),player.global_position,Color.red)
+					#DebugDraw.line(origin,end,Color.red)
 					
 					if not wrap_ray.is_colliding():
 						
