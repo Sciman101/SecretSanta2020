@@ -1,10 +1,11 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://textures/environment/Pickup.png" type="Texture" id=1]
 [ext_resource path="res://font/611Bit.tres" type="DynamicFont" id=2]
 [ext_resource path="res://scripts/ui/HUD.gd" type="Script" id=3]
 [ext_resource path="res://textures/backdrop.png" type="Texture" id=4]
 [ext_resource path="res://font/611BitSmall.tres" type="DynamicFont" id=5]
+[ext_resource path="res://scenes/partial/Cursor.tscn" type="PackedScene" id=6]
 
 [sub_resource type="Animation" id=1]
 resource_name = "Pop"
@@ -39,6 +40,8 @@ tracks/1/keys = {
 [node name="HUD" type="CanvasLayer"]
 layer = 10
 script = ExtResource( 3 )
+
+[node name="Cursor" parent="." instance=ExtResource( 6 )]
 
 [node name="Counter" type="Sprite" parent="."]
 position = Vector2( -64, 23 )
