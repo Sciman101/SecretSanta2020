@@ -1,8 +1,7 @@
-[gd_resource type="TileSet" load_steps=30 format=2]
+[gd_resource type="TileSet" load_steps=31 format=2]
 
 [ext_resource path="res://textures/environment/Tiles.png" type="Texture" id=1]
 [ext_resource path="res://textures/environment/Thorns.png" type="Texture" id=2]
-
 
 [sub_resource type="ConvexPolygonShape2D" id=1]
 points = PoolVector2Array( 32, 32, 0, 32, 0, 0, 32, 0 )
@@ -95,6 +94,9 @@ polygon = PoolVector2Array( 1.18883, 0.169872, 1.09535, 1.85222, 2.40385, 12.881
 
 [sub_resource type="ConvexPolygonShape2D" id=27]
 points = PoolVector2Array( 16, 16, 0, 16, 0, 0, 16, 0 )
+
+[sub_resource type="OccluderPolygon2D" id=28]
+polygon = PoolVector2Array( 4.29825, 9.93296, 7.25918, 9.39461, 27.0436, 6.83744, 26.6398, 21.7767, 18.6992, 22.8534, 18.8337, 32, 12.9119, 32, 13.181, 23.6609, 4.97118, 24.8722 )
 
 [resource]
 11/name = "Thorns"
@@ -354,3 +356,18 @@ points = PoolVector2Array( 16, 16, 0, 16, 0, 0, 16, 0 )
 19/shape_one_way_margin = 0.0
 19/shapes = [  ]
 19/z_index = 0
+20/name = "Sign"
+20/texture = ExtResource( 1 )
+20/tex_offset = Vector2( 0, 0 )
+20/modulate = Color( 1, 1, 1, 1 )
+20/region = Rect2( 32, 64, 32, 32 )
+20/tile_mode = 0
+20/occluder_offset = Vector2( 0, 0 )
+20/occluder = SubResource( 28 )
+20/navigation_offset = Vector2( 0, 0 )
+20/shape_offset = Vector2( 0, 0 )
+20/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+20/shape_one_way = false
+20/shape_one_way_margin = 0.0
+20/shapes = [  ]
+20/z_index = 0
