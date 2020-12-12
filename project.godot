@@ -17,7 +17,7 @@ _global_script_class_icons={
 
 config/name="SecretSanta"
 run/main_scene="res://scenes/Level.tscn"
-config/icon="res://textures/icon.png"
+config/icon="res://textures/player/icon.png"
 
 [autoload]
 
@@ -108,4 +108,8 @@ quality/2d/use_nvidia_rect_flicker_workaround=true
 quality/intended_usage/framebuffer_allocation=0
 quality/intended_usage/framebuffer_allocation.mobile=0
 quality/2d/use_pixel_snap=true
+quality/shadows/filter_mode=0
+quality/reflections/texture_array_reflections=false
+quality/reflections/high_quality_ggx=false
+quality/subsurface_scattering/quality=0
 environment/default_environment="res://default_env.tres"

@@ -23,6 +23,7 @@ onready var grapple := $Grapple
 
 onready var sfx_step := $SFX/Step
 onready var sfx_death := $SFX/Death
+onready var sfx_secret := $SFX/Secret
 
 onready var sprite := $Sprite
 onready var animation := $AnimationPlayer
@@ -137,10 +138,10 @@ func _handle_movement(delta:float) -> void:
 			var dir = (get_global_mouse_position() - global_position).normalized()
 			grapple.throw(dir*throw_speed)
 	
-	# Retract
-	if Input.is_action_pressed("retract"):
-		if rope.extended:
-			rope.try_retract(delta*32)
+#	# Retract
+#	if Input.is_action_pressed("retract"):
+#		if rope.extended:
+#			rope.try_retract(delta*32)
 	
 	# Get horizontal input
 	var hor := 0.0
