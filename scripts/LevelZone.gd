@@ -19,10 +19,14 @@ func _on_LevelZone_body_entered(body):
 		if secret and not found:
 			body.sfx_secret.play()
 		
-		Game.game_camera.tween_to(camera_start_pos.global_position)
+		# Tween the camera
+		if Game.game_camera.global_position != camera_start_pos.global_position:
+			Game.game_camera.tween_to(camera_start_pos.global_position)
+			body.frozen = true
 		
 		found = true
 
 
 func _on_LevelZone_body_exited(body):
-	pass # Replace with function body.
+	pass
+		

@@ -73,7 +73,6 @@ func _physics_process(delta:float) -> void:
 		
 		# Are we stretching the rope?
 		if slack > dangle_point.length_to_next:
-			
 			# Snap the rope if it's too long
 			if slack > dangle_point.length_to_next + 16:
 				detach_grapple()
@@ -106,11 +105,13 @@ func _physics_process(delta:float) -> void:
 			if wrap_ray.get_collider() and wrap_ray.get_collider().collision_layer & SPIKE_LAYER != 0:
 				# Break the connection
 				detach_grapple()
-				player.stunned = true
-				player.hitstun = 0.1
 				Game.game_camera.add_screenshake(8,0.1)
 				sfx_snip.play()
-				Game.set_cursor(Game.CURSOR_DISABLED)
+				# Stun the player
+				if not player.grounded:
+					player.stunned = true
+					player.hitstun = 0.1
+					Game.set_cursor(Game.CURSOR_DISABLED)
 				return
 			
 			# Get the point and add it to the list

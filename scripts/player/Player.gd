@@ -51,6 +51,8 @@ var standing_on # What are we standing on?
 var stunned : bool = false
 var hitstun : float
 
+var frozen := false # Used for transitioning from one screen to another
+
 var current_zone # The current level zone
 
 
@@ -59,6 +61,10 @@ func _ready() -> void:
 	
 	# Attach signals
 	grapple.connect("grapple_hit",rope,'attach_grapple')
+	Game.game_camera.connect('tween_done',self,'unfreeze')
+	
+	# Disable debugging on built versions
+	set_process_input(!OS.has_feature("standalone"))
 
 
 # DEBUGGING
@@ -69,9 +75,13 @@ func _input(event):
 				Engine.time_scale = min(1,Engine.time_scale+0.1)
 			elif event.button_index == BUTTON_WHEEL_DOWN:
 				Engine.time_scale = max(0,Engine.time_scale-0.1)
+			elif event.button_index == BUTTON_RIGHT:
+				global_position = get_global_mouse_position()
 
 
 func _physics_process(delta:float) -> void:
+	
+	if frozen: return
 	
 	if hitstun <= 0:
 		_handle_movement(delta)
@@ -82,6 +92,10 @@ func _physics_process(delta:float) -> void:
 		hitstun -= delta
 		animation.stop()
 		sprite.frame = 17
+
+
+func unfreeze() -> void:
+	frozen = false
 
 
 # Respawn the player
