@@ -29,6 +29,8 @@ onready var sprite := $Sprite
 onready var animation := $AnimationPlayer
 onready var dust := $DustParticles
 
+signal on_grounded
+
 # Calculated parameters
 var _gravity : float
 var _jump_speed : float
@@ -104,6 +106,8 @@ func respawn() -> void:
 	grapple.end_throw()
 	
 	sfx_death.play()
+	
+	current_zone.emit_signal('zone_reset')
 	
 	motion = Vector2.ZERO
 	sprite.rotation = 0
@@ -225,6 +229,7 @@ func _handle_movement(delta:float) -> void:
 	if grounded and not was_grounded:
 		edge_buffer = edge_buffer_time
 		air_jumps = 0
+		emit_signal('on_grounded')
 		# Clear stun
 		if stunned:
 			stunned = false

@@ -30,4 +30,5 @@ func _process(delta):
 		screenshake_time -= delta
 		if screenshake_time <= 0:
 			offset = Vector2.ZERO
+			screenshake = 0
 		
