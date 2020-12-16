@@ -42,6 +42,7 @@ layer = 10
 script = ExtResource( 3 )
 
 [node name="Cursor" parent="." instance=ExtResource( 6 )]
+pause_mode = 2
 
 [node name="Counter" type="Sprite" parent="."]
 position = Vector2( -64, 23 )

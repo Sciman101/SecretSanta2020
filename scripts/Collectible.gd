@@ -34,7 +34,8 @@ func _on_Collectible_body_entered(body):
 				get_parent().add_child(inst)
 				inst.global_position = global_position
 				particles.append(inst)
-				inst.wait = wait
+				if wait:
+					inst.hover_target = player
 
 func reset_if_not_collected() -> void:
 	if not collected and player:
@@ -43,7 +44,7 @@ func reset_if_not_collected() -> void:
 			player.disconnect('on_grounded',self,'_on_player_grounded')
 		# Remove particles
 		for part in particles:
-			part.queue_free()
+			if part: part.queue_free()
 		particles.clear()
 		# Re-show
 		visible = true
@@ -52,5 +53,5 @@ func _on_player_grounded() -> void:
 	Game.on_collect_flower()
 	player.disconnect('on_grounded',self,'_on_player_grounded')
 	for part in particles:
-		part.wait = false
+		if part: part.hover_target = null
 	collected = true

@@ -21,8 +21,9 @@ func _on_tween_completed(o,k):
 	emit_signal("tween_done")
 
 func add_screenshake(amt:float,time:float=0.05) -> void:
-	screenshake += amt
-	screenshake_time = time
+	if Game.enable_screenshake:
+		screenshake += amt
+		screenshake_time = time
 
 func _process(delta):
 	if screenshake_time > 0:

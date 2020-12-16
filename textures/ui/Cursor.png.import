@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/Cursor.png-6954e23a9e219b414b5b73e3163aa793.stex"
+path="res://.import/Cursor.png-838043938d97ecc3232d48339270ba83.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://textures/Cursor.png"
-dest_files=[ "res://.import/Cursor.png-6954e23a9e219b414b5b73e3163aa793.stex" ]
+source_file="res://textures/ui/Cursor.png"
+dest_files=[ "res://.import/Cursor.png-838043938d97ecc3232d48339270ba83.stex" ]
 
 [params]
 
