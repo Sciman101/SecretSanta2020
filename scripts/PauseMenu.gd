@@ -11,6 +11,10 @@ func _ready() -> void:
 
 func set_visible(visible:bool) -> void:
 	bg.visible = visible
+	if visible:
+		Game.hud.show_flower_count()
+	else:
+		Game.hud._on_CounterAnim_animation_finished('Show')
 
 # Specific menu button operations
 func quit():

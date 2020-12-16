@@ -13,8 +13,11 @@ func _ready():
 
 func show_flower_count() -> void:
 	if not anim.is_playing():
-		anim.play('Pop')
+		anim.play('Show')
 
+func _on_CounterAnim_animation_finished(anim_name):
+	if anim_name == 'Show' and not get_tree().paused:
+		anim.play("Hide")
 
 func update_label() -> void:
 	label.text = str(Game.flowers_collected)
