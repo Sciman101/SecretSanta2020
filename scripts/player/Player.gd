@@ -47,6 +47,7 @@ var motion : Vector2
 var grounded : bool
 var was_grounded : bool
 var air_jumps : int
+var in_water : bool
 
 var standing_on # What are we standing on?
 
@@ -219,7 +220,10 @@ func _handle_movement(delta:float) -> void:
 		motion.x = move_toward(motion.x,hor * move_speed,acc*delta)
 	
 	# Gravity
-	motion.y += _gravity * delta * (1 if motion.y <= 0 else falling_grav_multiplier)
+	motion.y += _gravity * delta * (1 if motion.y <= 0 else falling_grav_multiplier) * (-0.5 if in_water else 1)
+	
+	if in_water:
+		motion = motion.move_toward(Vector2.ZERO,delta*250)
 	
 	# Jump input
 	if Input.is_action_just_pressed("jump"):

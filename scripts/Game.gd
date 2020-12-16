@@ -12,7 +12,10 @@ var cursor # Reference to the cursor
 var hud
 
 var enable_screenshake := true
+var timer_enabled := false setget _set_enable_timer
 var flowers_collected := 0
+
+var game_time := 0.0
 
 
 func _ready() -> void:
@@ -26,6 +29,11 @@ func _notification(what) -> void:
 		save_settings()
 		get_tree().quit()
 
+func _process(delta) -> void:
+	if not get_tree().paused:
+		game_time += delta
+		if timer_enabled:
+			hud.set_timer_time(game_time)
 
 # Key shortcuts
 func _input(event):
@@ -33,8 +41,14 @@ func _input(event):
 		match event.scancode:
 			KEY_F11: # Toggle fullscreen
 				OS.window_fullscreen = !OS.window_fullscreen
+				PauseMenu._update_btn()
 			KEY_ESCAPE: # Pause the game
 				toggle_pause()
+
+
+func restart_timer() -> void:
+	game_time = 0.0
+
 
 func toggle_pause():
 	get_tree().paused = !get_tree().paused
@@ -48,11 +62,19 @@ func set_cursor(frame:int) -> void:
 		print('Attempting to set cursor frame with no cursor!')
 
 
+func _set_enable_timer(val) -> void:
+	timer_enabled = val
+	if hud:
+		hud.timer.visible = val
+
+
 # Save and load settings
 func save_settings() -> void:
 	var config = {
 		screenshake=enable_screenshake,
-		volume=db2linear(AudioServer.get_bus_volume_db(0))
+		volume=db2linear(AudioServer.get_bus_volume_db(0)),
+		fullscreen=OS.window_fullscreen,
+		timer=timer_enabled
 	}
 	# Open settings file
 	var file = File.new()
@@ -68,6 +90,8 @@ func load_settings() -> void:
 		# Actually set stuff up
 		AudioServer.set_bus_volume_db(0,linear2db(config.volume))
 		enable_screenshake = config.screenshake
+		OS.window_fullscreen = config.fullscreen
+		self.timer_enabled = config.timer
 
 
 # Called when a flower is collected

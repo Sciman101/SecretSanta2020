@@ -34,8 +34,7 @@ func _on_Collectible_body_entered(body):
 				get_parent().add_child(inst)
 				inst.global_position = global_position
 				particles.append(inst)
-				if wait:
-					inst.hover_target = player
+				inst.wait = wait
 
 func reset_if_not_collected() -> void:
 	if not collected and player:
@@ -53,5 +52,5 @@ func _on_player_grounded() -> void:
 	Game.on_collect_flower()
 	player.disconnect('on_grounded',self,'_on_player_grounded')
 	for part in particles:
-		if part: part.hover_target = null
+		if part: part.wait = false
 	collected = true
