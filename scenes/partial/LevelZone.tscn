@@ -3,7 +3,7 @@
 [ext_resource path="res://scripts/LevelZone.gd" type="Script" id=1]
 
 [sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 300, 170 )
+extents = Vector2( 300, 160 )
 
 [node name="LevelZone" type="Area2D"]
 script = ExtResource( 1 )

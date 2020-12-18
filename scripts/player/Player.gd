@@ -24,6 +24,7 @@ onready var grapple := $Grapple
 onready var sfx_step := $SFX/Step
 onready var sfx_death := $SFX/Death
 onready var sfx_secret := $SFX/Secret
+onready var sfx_splash := $SFX/Splash
 
 onready var sprite := $Sprite
 onready var animation := $AnimationPlayer
@@ -47,7 +48,7 @@ var motion : Vector2
 var grounded : bool
 var was_grounded : bool
 var air_jumps : int
-var in_water : bool
+var water_area = null
 
 var standing_on # What are we standing on?
 
@@ -121,6 +122,8 @@ func respawn() -> void:
 		for i in range(64):
 			var r = Vector2(rand_range(-16,16),rand_range(-16,16))
 			rope.particles.add_particle(global_position+r,r.normalized()*16)
+	
+	Game.restarts += 1
 
 
 # Calculate jump vars using projectile motion and acceleration
@@ -220,14 +223,16 @@ func _handle_movement(delta:float) -> void:
 		motion.x = move_toward(motion.x,hor * move_speed,acc*delta)
 	
 	# Gravity
-	motion.y += _gravity * delta * (1 if motion.y <= 0 else falling_grav_multiplier) * (-0.5 if in_water else 1)
+	motion.y += _gravity * delta * (1 if motion.y <= 0 else falling_grav_multiplier) * (-0.5 if water_area else 1)
 	
-	if in_water:
+	if water_area:
 		motion = motion.move_toward(Vector2.ZERO,delta*250)
+		stunned = false
+		Game.set_cursor(Game.CURSOR_NORMAL)
 	
 	# Jump input
 	if Input.is_action_just_pressed("jump"):
-		if grounded or air_jumps < max_air_jumps:
+		if grounded or air_jumps < max_air_jumps or water_area:
 			jump_buffer = jump_buffer_time
 	# Edge buffer
 	if grounded and not was_grounded:
@@ -245,7 +250,7 @@ func _handle_movement(delta:float) -> void:
 	if edge_buffer > 0: edge_buffer = max(edge_buffer-delta,0)
 #
 #	# Jumping	
-	if jump_buffer > 0 and (grounded or edge_buffer > 0 or air_jumps < max_air_jumps):
+	if jump_buffer > 0 and (grounded or edge_buffer > 0 or air_jumps < max_air_jumps or water_area):
 		# Apply speed
 		motion.y = -_jump_speed
 		

@@ -1,6 +1,7 @@
 extends Node
 
 const SETTINGS_FILE_NAME := 'user://settings.conf'
+const TOTAL_FLOWERS := 10
 
 const CURSOR_NORMAL := 0
 const CURSOR_DARK := 1
@@ -14,6 +15,7 @@ var hud
 var enable_screenshake := true
 var timer_enabled := false setget _set_enable_timer
 var flowers_collected := 0
+var restarts := 0
 
 var game_time := 0.0
 
@@ -48,6 +50,7 @@ func _input(event):
 
 func restart_timer() -> void:
 	game_time = 0.0
+	restarts = 0
 
 
 func toggle_pause():
@@ -66,6 +69,7 @@ func _set_enable_timer(val) -> void:
 	timer_enabled = val
 	if hud:
 		hud.timer.visible = val
+		hud.set_timer_time(game_time)
 
 
 # Save and load settings

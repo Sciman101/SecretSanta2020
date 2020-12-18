@@ -21,9 +21,11 @@ __meta__ = {
 }
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Background"]
-margin_left = 222.0
-margin_right = 418.0
-margin_bottom = 360.0
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_bottom = 1.0
+margin_left = -110.0
+margin_right = 110.0
 custom_constants/separation = 4
 alignment = 1
 __meta__ = {
@@ -32,13 +34,13 @@ __meta__ = {
 
 [node name="Label" type="Label" parent="Background/VBoxContainer"]
 margin_top = 38.0
-margin_right = 196.0
+margin_right = 220.0
 margin_bottom = 66.0
 text = "Paused"
 
 [node name="Resume" type="Button" parent="Background/VBoxContainer"]
 margin_top = 70.0
-margin_right = 196.0
+margin_right = 220.0
 margin_bottom = 102.0
 focus_mode = 0
 enabled_focus_mode = 0
@@ -46,38 +48,38 @@ text = "Resume"
 
 [node name="Restart" type="Button" parent="Background/VBoxContainer"]
 margin_top = 106.0
-margin_right = 196.0
+margin_right = 220.0
 margin_bottom = 138.0
 text = "Restart Game"
 
 [node name="Screenshake" type="Button" parent="Background/VBoxContainer"]
 margin_top = 142.0
-margin_right = 196.0
+margin_right = 220.0
 margin_bottom = 174.0
 text = "Screenshake: On"
 
 [node name="ShowTimer" type="Button" parent="Background/VBoxContainer"]
 margin_top = 178.0
-margin_right = 196.0
+margin_right = 220.0
 margin_bottom = 210.0
 text = "Timer: Off"
 
 [node name="Fullscreen" type="Button" parent="Background/VBoxContainer"]
 margin_top = 214.0
-margin_right = 196.0
+margin_right = 220.0
 margin_bottom = 246.0
 text = "Fullscreen"
 
 [node name="Volume" type="Label" parent="Background/VBoxContainer"]
 margin_top = 250.0
-margin_right = 196.0
+margin_right = 220.0
 margin_bottom = 266.0
 custom_fonts/font = ExtResource( 2 )
 text = "Volume"
 
 [node name="VolumeSlider" type="HSlider" parent="Background/VBoxContainer"]
 margin_top = 270.0
-margin_right = 196.0
+margin_right = 220.0
 margin_bottom = 286.0
 max_value = 1.0
 step = 0.0
@@ -86,7 +88,7 @@ scrollable = false
 
 [node name="Quit" type="Button" parent="Background/VBoxContainer"]
 margin_top = 290.0
-margin_right = 196.0
+margin_right = 220.0
 margin_bottom = 322.0
 text = "Quit"
 [connection signal="pressed" from="Background/VBoxContainer/Resume" to="." method="resume"]

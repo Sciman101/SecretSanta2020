@@ -4,10 +4,10 @@
 [ext_resource path="res://textures/fx/noise.png" type="Texture" id=2]
 [ext_resource path="res://scripts/Water.gd" type="Script" id=3]
 
-[sub_resource type="RectangleShape2D" id=3]
+[sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 8, 8 )
 
-[sub_resource type="Shader" id=1]
+[sub_resource type="Shader" id=2]
 code = "shader_type canvas_item;
 
 uniform sampler2D noise;
@@ -24,8 +24,8 @@ void fragment() {
 	COLOR = mix(texture(SCREEN_TEXTURE,SCREEN_UV+offset*0.01),color,0.5);
 }"
 
-[sub_resource type="ShaderMaterial" id=2]
-shader = SubResource( 1 )
+[sub_resource type="ShaderMaterial" id=3]
+shader = SubResource( 2 )
 shader_param/color = Color( 0.2, 0.266667, 0.678431, 1 )
 shader_param/noise = ExtResource( 2 )
 
@@ -35,10 +35,10 @@ z_as_relative = false
 script = ExtResource( 3 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-shape = SubResource( 3 )
+shape = SubResource( 1 )
 
 [node name="Sprite" type="Sprite" parent="."]
-material = SubResource( 2 )
+material = SubResource( 3 )
 texture = ExtResource( 1 )
 [connection signal="body_entered" from="." to="." method="_on_Water_body_entered"]
 [connection signal="body_exited" from="." to="." method="_on_Water_body_exited"]

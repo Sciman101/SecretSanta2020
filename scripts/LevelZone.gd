@@ -1,7 +1,5 @@
 extends Area2D
 
-export var track_h : bool # Should the player be tracked horizontally in this zone?
-export var track_v : bool # Should the player be tracked vertically in this zone?
 export var secret : bool
 
 onready var level_shape = $LevelShape.shape # Used to constrain the camera if track_h or track_v is enabled
