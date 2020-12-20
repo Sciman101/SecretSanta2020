@@ -23,7 +23,7 @@ func _physics_process(delta:float) -> void:
 		var grounded = is_on_floor()
 		if grounded:
 			motion.x = move_toward(motion.x,0,friction*delta)
-			if not was_on_floor:
+			if not was_on_floor and motion.y > 50:
 				Game.game_camera.add_screenshake(4,0.1)
 		was_on_floor = grounded
 		

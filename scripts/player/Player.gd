@@ -2,6 +2,7 @@ extends KinematicBody2D
 
 const ACC_INSTANT = 1000000 # If acceleration time is 0, default to this
 const HALF_PI := PI/2
+const MAX_GRACE_FRAMES := 2
 
 # Exposed movement parameters
 export var move_speed : float
@@ -54,6 +55,7 @@ var standing_on # What are we standing on?
 
 var stunned : bool = false
 var hitstun : float
+var grace_frames := 0
 
 var frozen := false # Used for transitioning from one screen to another
 
@@ -104,6 +106,7 @@ func unfreeze() -> void:
 
 # Respawn the player
 func respawn() -> void:
+	
 	rope.detach_grapple(false)
 	grapple.end_throw()
 	
@@ -270,6 +273,7 @@ func _handle_movement(delta:float) -> void:
 	motion = move_and_slide(motion,Vector2.UP)
 	
 	standing_on = null
+	var found_spike = false
 	for i in range(get_slide_count()):
 		var c = get_slide_collision(i)
 		# Check for ground
@@ -278,6 +282,11 @@ func _handle_movement(delta:float) -> void:
 		# Check for spikes
 		if c.collider and c.collider.collision_layer & 2 != 0:
 			# Uh oh
-			respawn()
+			grace_frames += 1
+			found_spike = true
+			if grace_frames >= MAX_GRACE_FRAMES:
+				respawn()
+	if not found_spike:
+		grace_frames = 0
 	
 	was_grounded = grounded

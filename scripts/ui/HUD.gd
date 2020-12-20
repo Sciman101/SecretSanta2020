@@ -14,6 +14,25 @@ func _ready():
 	Game.hud = self
 	# Hacky way to make this work
 	Game._set_enable_timer(Game.timer_enabled)
+	$Results.visible = false
+
+
+# Display final results
+func show_results() -> void:
+	var results = $Results
+	var lbl = $Results/Label
+	
+	# Show results
+	var time = Game.game_time
+	var minutes = floor(time/60)
+	var seconds = fmod(time,60)
+	lbl.text = lbl.text % [minutes,seconds,Game.flowers_collected,Game.flowers_total,Game.restarts]
+	
+	# Unhide
+	results.visible = true
+	popup_tween.stop_all()
+	popup_tween.interpolate_property(results,'modulate',TRANSPARENT,Color.white,0.25)
+	popup_tween.start()
 
 
 func set_timer_time(time:float) -> void:

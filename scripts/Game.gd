@@ -1,7 +1,6 @@
 extends Node
 
 const SETTINGS_FILE_NAME := 'user://settings.conf'
-const TOTAL_FLOWERS := 10
 
 const CURSOR_NORMAL := 0
 const CURSOR_DARK := 1
@@ -15,9 +14,11 @@ var hud
 var enable_screenshake := true
 var timer_enabled := false setget _set_enable_timer
 var flowers_collected := 0
+var flowers_total := 0
 var restarts := 0
 
 var game_time := 0.0
+var complete := false # Set to true once we beat the game
 
 
 func _ready() -> void:
@@ -32,7 +33,7 @@ func _notification(what) -> void:
 		get_tree().quit()
 
 func _process(delta) -> void:
-	if not get_tree().paused:
+	if not get_tree().paused and not complete:
 		game_time += delta
 		if timer_enabled:
 			hud.set_timer_time(game_time)
@@ -48,14 +49,28 @@ func _input(event):
 				toggle_pause()
 
 
+func complete_game() -> void:
+	complete = true
+	if get_tree().paused:
+		toggle_pause()
+	hud.show_results()
+	PauseMenu.layer = 12
+
+
 func restart_timer() -> void:
 	game_time = 0.0
 	restarts = 0
+	complete = false
+	flowers_collected = 0
+	PauseMenu.layer = 9
 
 
 func toggle_pause():
 	get_tree().paused = !get_tree().paused
 	PauseMenu.set_visible(get_tree().paused)
+	if complete:
+		# Show cursor on end screen, since the pause menu now obstructs the HUD
+		Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN if not get_tree().paused else Input.MOUSE_MODE_VISIBLE)
 
 # Set the cursor based on index (defined as constants above)
 func set_cursor(frame:int) -> void:

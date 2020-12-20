@@ -1,5 +1,7 @@
 extends Area2D
 
+export var do_not_total : bool = false # Don't add this flower to the total
+
 onready var Particle := preload("res://scenes/partial/PetalParticle.tscn")
 var player
 var collected := false
@@ -7,6 +9,8 @@ var particles = []
 
 func _ready() -> void:
 	get_parent().connect('zone_reset',self,'reset_if_not_collected')
+	# Sum flower collectibles
+	if not do_not_total: Game.flowers_total += 1
 
 # Collect thing
 func _on_Collectible_body_entered(body):
