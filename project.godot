@@ -15,8 +15,11 @@ _global_script_class_icons={
 
 [application]
 
-config/name="SecretSanta"
+config/name="Vinekid"
 run/main_scene="res://scenes/Level.tscn"
+boot_splash/image="res://textures/ui/Title.png"
+boot_splash/fullsize=false
+boot_splash/use_filter=false
 config/icon="res://textures/player/icon.png"
 
 [autoload]
