@@ -62,6 +62,7 @@ func restart_timer() -> void:
 	restarts = 0
 	complete = false
 	flowers_collected = 0
+	flowers_total = 0
 	PauseMenu.layer = 9
 
 
