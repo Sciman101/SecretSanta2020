@@ -2,7 +2,7 @@ extends KinematicBody2D
 
 const ACC_INSTANT = 1000000 # If acceleration time is 0, default to this
 const HALF_PI := PI/2
-const MAX_GRACE_FRAMES := 2
+const MAX_GRACE_FRAMES := 3
 
 # Exposed movement parameters
 export var move_speed : float
@@ -284,7 +284,7 @@ func _handle_movement(delta:float) -> void:
 			# Uh oh
 			grace_frames += 1
 			found_spike = true
-			if grace_frames >= MAX_GRACE_FRAMES:
+			if grace_frames >= MAX_GRACE_FRAMES or (rope.extended and not grounded):
 				respawn()
 	if not found_spike:
 		grace_frames = 0

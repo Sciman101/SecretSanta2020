@@ -6,6 +6,7 @@ onready var Particle := preload("res://scenes/partial/PetalParticle.tscn")
 var player
 var collected := false
 var particles = []
+var grounded_frames := 0
 
 func _ready() -> void:
 	get_parent().connect('zone_reset',self,'reset_if_not_collected')
@@ -51,8 +52,18 @@ func reset_if_not_collected() -> void:
 		particles.clear()
 		# Re-show
 		visible = true
+		grounded_frames = 0
 
 func _on_player_grounded() -> void:
+	
+	while grounded_frames <= player.MAX_GRACE_FRAMES and not visible:
+		grounded_frames += 1
+		yield(get_tree(),"idle_frame")
+	
+	if visible:
+		grounded_frames = 0
+		return
+	
 	Game.on_collect_flower()
 	player.disconnect('on_grounded',self,'_on_player_grounded')
 	for part in particles:
