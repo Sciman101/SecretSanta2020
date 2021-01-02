@@ -24,6 +24,7 @@ var complete := false # Set to true once we beat the game
 func _ready() -> void:
 	load_settings()
 	pause_mode = Node.PAUSE_MODE_PROCESS
+	Input.set_mouse_mode(Input.MOUSE_MODE_CONFINED)
 
 
 # Quit the game when appropriate

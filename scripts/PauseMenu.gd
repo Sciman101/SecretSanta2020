@@ -13,6 +13,7 @@ func _ready() -> void:
 
 func set_visible(visible:bool) -> void:
 	bg.visible = visible
+	Input.set_mouse_mode(Input.MOUSE_MODE_CONFINED if not visible else Input.MOUSE_MODE_VISIBLE)
 	if visible:
 		Game.hud.show_flower_count()
 	else:
