@@ -82,9 +82,6 @@ margin_right = 55.0
 margin_bottom = 19.0
 custom_fonts/font = ExtResource( 2 )
 text = "0"
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="CounterAnim" type="AnimationPlayer" parent="Counter"]
 anims/Hide = SubResource( 1 )
@@ -124,6 +121,37 @@ __meta__ = {
 
 [node name="Tween" type="Tween" parent="Popup"]
 
+[node name="CheatsLabel" type="Label" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 1
+custom_constants/shadow_offset_y = 1
+custom_constants/shadow_as_outline = 1
+custom_fonts/font = ExtResource( 5 )
+text = "CHEATS ENABLED"
+align = 1
+valign = 2
+autowrap = true
+
+[node name="Speedometer" type="Label" parent="."]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_right = -8.0
+margin_bottom = -8.0
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 1
+custom_constants/shadow_offset_y = 1
+custom_constants/shadow_as_outline = 1
+custom_fonts/font = ExtResource( 5 )
+text = "Speed: 100"
+align = 2
+valign = 2
+autowrap = true
+
 [node name="Timer" type="Label" parent="."]
 visible = false
 anchor_left = 1.0
@@ -140,6 +168,7 @@ __meta__ = {
 }
 
 [node name="Results" type="ColorRect" parent="."]
+visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 2
@@ -161,4 +190,5 @@ Thanks for playing!
 (Esc to open menu)"
 align = 1
 valign = 1
+
 [connection signal="animation_finished" from="Counter/CounterAnim" to="." method="_on_CounterAnim_animation_finished"]

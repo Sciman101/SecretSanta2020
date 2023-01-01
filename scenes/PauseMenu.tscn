@@ -91,6 +91,7 @@ margin_top = 290.0
 margin_right = 220.0
 margin_bottom = 322.0
 text = "Quit"
+
 [connection signal="pressed" from="Background/VBoxContainer/Resume" to="." method="resume"]
 [connection signal="pressed" from="Background/VBoxContainer/Restart" to="." method="restart"]
 [connection signal="pressed" from="Background/VBoxContainer/Screenshake" to="." method="_on_Screenshake_pressed"]

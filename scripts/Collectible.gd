@@ -30,6 +30,7 @@ func _on_Collectible_body_entered(body):
 			else:
 				# Otherwise, wait for the player to land before collecting
 				body.connect('on_grounded',self,'_on_player_grounded')
+				Game.connect('on_game_finished',self,'_force_collect')
 				player = body
 				wait = true
 			
@@ -64,6 +65,9 @@ func _on_player_grounded() -> void:
 		grounded_frames = 0
 		return
 	
+	_force_collect()
+
+func _force_collect() -> void:
 	Game.on_collect_flower()
 	player.disconnect('on_grounded',self,'_on_player_grounded')
 	for part in particles:

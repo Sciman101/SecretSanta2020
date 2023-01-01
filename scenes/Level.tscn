@@ -109,7 +109,7 @@ position = Vector2( -61.935, 93.6662 )
 
 [node name="PopupControls1" parent="Zones/LevelZone0" instance=ExtResource( 10 )]
 position = Vector2( -61.935, 93.6663 )
-message = "Press A and D to walk left and right"
+message = "Press A and D to walk left and right. Escape to pause"
 
 [node name="PopupControls2" parent="Zones/LevelZone0" instance=ExtResource( 10 )]
 position = Vector2( 113.817, 93.6663 )
@@ -173,7 +173,8 @@ position = Vector2( -38.5, -16.5 )
 
 [node name="PopupRegion" parent="Zones/LevelZone4" instance=ExtResource( 10 )]
 position = Vector2( 272, 116.966 )
-message = "Stuck? Press 'R' to restart the room"
+message = "Stuck? Press 'R' to restart the room.
+(Hold shift at the same time to restart the game)"
 
 [node name="LevelZone5" parent="Zones" instance=ExtResource( 4 )]
 position = Vector2( -320, 560 )
@@ -475,52 +476,30 @@ shape = SubResource( 6 )
 
 [node name="Player" parent="." instance=ExtResource( 2 )]
 position = Vector2( -381.935, 273.666 )
+
 [connection signal="body_entered" from="Zones/EndingZone/Finish" to="Zones/EndingZone/Finish" method="_on_Finish_body_entered"]
 
 [editable path="Zones/LevelZone0"]
-
 [editable path="Zones/LevelZone1"]
-
 [editable path="Zones/LevelZone2"]
-
 [editable path="Zones/LevelZone3"]
-
 [editable path="Zones/LevelZone4"]
-
 [editable path="Zones/LevelZone5"]
-
 [editable path="Zones/LevelZone6"]
-
 [editable path="Zones/HiddenLevelZone1"]
-
 [editable path="Zones/LevelZone7"]
-
 [editable path="Zones/LevelZone8"]
-
 [editable path="Zones/LevelZone9"]
-
 [editable path="Zones/SuperHiddenLevelZone"]
-
 [editable path="Zones/LevelZone10"]
-
 [editable path="Zones/LevelZone11"]
-
 [editable path="Zones/LevelZone12"]
-
 [editable path="Zones/HiddenLevelZone2"]
-
 [editable path="Zones/LevelZone13"]
-
 [editable path="Zones/LevelZone14"]
-
 [editable path="Zones/LevelZone15"]
-
 [editable path="Zones/LevelZone16"]
-
 [editable path="Zones/LevelZone17"]
-
 [editable path="Zones/LevelZone18"]
-
 [editable path="Zones/LevelZone19"]
-
 [editable path="Zones/LevelZone20"]

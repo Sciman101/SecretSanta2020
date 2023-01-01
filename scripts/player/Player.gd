@@ -68,21 +68,18 @@ func _ready() -> void:
 	# Attach signals
 	grapple.connect("grapple_hit",rope,'attach_grapple')
 	Game.game_camera.connect('tween_done',self,'unfreeze')
-	
-	# Disable debugging on built versions
-	set_process_input(!OS.has_feature("standalone"))
 
 
 # DEBUGGING
 func _input(event):
-	if event is InputEventMouseButton:
-		if event.pressed:
-			if event.button_index == BUTTON_WHEEL_UP:
-				Engine.time_scale = min(1,Engine.time_scale+0.1)
-			elif event.button_index == BUTTON_WHEEL_DOWN:
-				Engine.time_scale = max(0,Engine.time_scale-0.1)
-			elif event.button_index == BUTTON_RIGHT:
-				global_position = get_global_mouse_position()
+	if Game.cheats:
+		if event is InputEventMouseButton:
+			if event.pressed:
+				if event.button_index == BUTTON_RIGHT:
+					global_position = get_global_mouse_position()
+		elif event is InputEventKey:
+			if event.scancode == KEY_CONTROL:
+				Engine.time_scale = 0.25 if event.pressed else 1
 
 
 func _physics_process(delta:float) -> void:
@@ -271,6 +268,8 @@ func _handle_movement(delta:float) -> void:
 	
 	# Actually move
 	motion = move_and_slide(motion,Vector2.UP)
+	if Game.hud and Game.hud.speedometer.visible:
+		Game.hud.set_speedometer_value(motion.length())
 	
 	standing_on = null
 	var found_spike = false

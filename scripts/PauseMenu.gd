@@ -23,9 +23,7 @@ func set_visible(visible:bool) -> void:
 func quit():
 	Game._notification(NOTIFICATION_WM_QUIT_REQUEST)
 func restart():
-	get_tree().reload_current_scene()
-	Game.toggle_pause()
-	Game.restart_timer()
+	Game.restart_game()
 func resume():
 	Game.toggle_pause()
 

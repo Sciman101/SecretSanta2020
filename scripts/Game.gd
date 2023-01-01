@@ -20,6 +20,10 @@ var restarts := 0
 var game_time := 0.0
 var complete := false # Set to true once we beat the game
 
+var cheats := false
+
+signal on_game_finished
+signal toggle_cheats
 
 func _ready() -> void:
 	load_settings()
@@ -36,7 +40,7 @@ func _notification(what) -> void:
 func _process(delta) -> void:
 	if not get_tree().paused and not complete:
 		game_time += delta
-		if timer_enabled:
+		if timer_enabled and not cheats:
 			hud.set_timer_time(game_time)
 
 # Key shortcuts
@@ -48,24 +52,39 @@ func _input(event):
 				PauseMenu._update_btn()
 			KEY_ESCAPE: # Pause the game
 				toggle_pause()
+			KEY_R:
+				if Input.is_key_pressed(KEY_SHIFT):
+					restart_game()
+			KEY_F1:
+				if get_tree().is_paused():
+					cheats = !cheats
+					emit_signal('toggle_cheats')
+			
+			KEY_F10:
+				if hud:
+					hud.speedometer.visible = !hud.speedometer.visible
 
 
 func complete_game() -> void:
 	complete = true
+	emit_signal("on_game_finished")
 	if get_tree().paused:
 		toggle_pause()
 	hud.show_results()
 	PauseMenu.layer = 12
 
 
-func restart_timer() -> void:
+func restart_game():
+	get_tree().reload_current_scene()
+	if get_tree().paused:
+		toggle_pause()
+	
 	game_time = 0.0
 	restarts = 0
 	complete = false
 	flowers_collected = 0
 	flowers_total = 0
 	PauseMenu.layer = 9
-
 
 func toggle_pause():
 	get_tree().paused = !get_tree().paused
