@@ -68,8 +68,10 @@ func _on_player_grounded() -> void:
 	_force_collect()
 
 func _force_collect() -> void:
-	Game.on_collect_flower()
-	player.disconnect('on_grounded',self,'_on_player_grounded')
-	for part in particles:
-		if part: part.wait = false
-	collected = true
+	if not collected:
+		Game.on_collect_flower()
+		Game.disconnect('on_game_finished',self,'_force_collect')
+		player.disconnect('on_grounded',self,'_on_player_grounded')
+		for part in particles:
+			if part: part.wait = false
+		collected = true

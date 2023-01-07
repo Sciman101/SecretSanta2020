@@ -46,15 +46,16 @@ func _process(delta) -> void:
 # Key shortcuts
 func _input(event):
 	if event is InputEventKey and event.is_pressed():
+		
+		if Input.is_action_just_pressed("restart_game"):
+			restart_game()
+		
 		match event.scancode:
 			KEY_F11: # Toggle fullscreen
 				OS.window_fullscreen = !OS.window_fullscreen
 				PauseMenu._update_btn()
 			KEY_ESCAPE: # Pause the game
 				toggle_pause()
-			KEY_R:
-				if Input.is_key_pressed(KEY_SHIFT):
-					restart_game()
 			KEY_F1:
 				if get_tree().is_paused():
 					cheats = !cheats
